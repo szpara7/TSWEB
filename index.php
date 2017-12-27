@@ -9,13 +9,20 @@ require_once './services/AuthorService.php';
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-require_once('./services/GenreService.php');
-require_once('./model/Genre.php');
+require_once('./services/BookService.php');
+require_once('./model/Book.php');
 
-$genre = new GenreService();
-$model = new Genre();
+$genre = new BookService();
+$model = new Book();
+$czas = new DateTime();
 
-$model->name="Pierwszy";
+$model->title="Pierwszy";
+$model->description = "DESC";
+$model->isbn = '123455';
+$model->page_count = 132;
+$model->year = date("Y-m-d H:i:s", $czas->getTimestamp());
+$model->author_id = 1;
+$model->genre_id = 1;
 //$genre->Add($model);
 $data = $genre->GetAll();
 
@@ -23,7 +30,7 @@ $data = $genre->GetAll();
 $js = json_encode($data);
 echo $js;
 $model->id = 2;
-$model->name = "PierwszyUpdate";
+$model->title = "PierwszyUpdate";
 //$genre->Update($model);
 
 $genre->Delete(2);
