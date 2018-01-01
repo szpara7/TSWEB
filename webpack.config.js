@@ -1,7 +1,6 @@
 module.exports = {
-    entry: ['./main.js'],
+    entry: ['./js/src/main.js'],
     output: {
-       
         filename: 'bundle.js'
     },
     module: {
@@ -11,7 +10,6 @@ module.exports = {
             exclude: /node_modules/,
             query: {
                 cacheDirectory: true,
-                // presets: ['es2015', 'react']
                 presets: ['es2015', 'react']
             }
         }]

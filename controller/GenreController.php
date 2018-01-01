@@ -1,6 +1,6 @@
 <?php
 
-require_once('./services/GenreService.php');
+require_once('../services/GenreService.php');
 
 class GenreController {
 
@@ -9,7 +9,7 @@ class GenreController {
         $service = new GenreService();
         $data = $service->GetAll();
         $author->Disconnect();
-        return json_encode($data);
+        echo json_encode($data);
     }
 
     public function GetById($id)
@@ -17,7 +17,7 @@ class GenreController {
         $service = new GenreService();
         $data = $service->GetById($id);
         $author->Disconnect();
-        return json_encode($data);
+        echo json_encode($data);
     }
 
     public function Add($model)

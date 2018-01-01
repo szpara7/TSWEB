@@ -1,6 +1,6 @@
 <?php
-require_once('./controller/GenreController.php');
- require_once('./model/Genre.php');
+require_once('../controller/GenreController.php');
+ require_once('../model/Genre.php');
  $controller = new GenreController();
  $model = new Genre();
     if(empty($_GET['q'])) {

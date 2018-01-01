@@ -1,6 +1,6 @@
 <?php
-require_once('./services/AuthorService.php');
-require_once('./model/Author.php');
+require_once('../services/AuthorService.php');
+require_once('../model/Author.php');
 
 class AuthorController {    
 
@@ -9,7 +9,7 @@ class AuthorController {
         $author = new AuthorService();
         $data = $author->GetAll();
         $author->Disconnect();
-        return json_encode($data);
+        echo json_encode($data);
     }
 
     public function GetById($id)
@@ -17,7 +17,7 @@ class AuthorController {
         $service = new AuthorService();
         $data = $service->GetById($id);
         $author->Disconnect();
-        return json_encode($data);
+        echo json_encode($data);
     }
 
     public function Add($model)

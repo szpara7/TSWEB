@@ -1,12 +1,12 @@
 <?php
-require_once('./controller/AuthorController.php');
- require_once('./model/Author.php');
+require_once('../controller/AuthorController.php');
+ require_once('../model/Author.php');
  $controller = new AuthorController();
  $model = new Author();
     if(empty($_GET['q'])) {
      die();
  }
- 
+
  switch($_GET['q']) {
      case 'GetAll':
      $controller->GetAll();
