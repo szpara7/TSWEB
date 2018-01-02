@@ -8,7 +8,7 @@ class BookController {
     {
         $service = new BookService();
         $data = $service->GetAll();
-        $author->Disconnect();
+        $service->Disconnect();
         echo json_encode($data);
     }
 
@@ -16,7 +16,7 @@ class BookController {
     {
         $service = new BookService();
         $data = $service->GetById($id);
-        $author->Disconnect();
+        $service->Disconnect();
         echo json_encode($data);
     }
 

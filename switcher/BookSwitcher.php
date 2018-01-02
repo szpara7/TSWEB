@@ -1,6 +1,6 @@
 <?php
 require_once('../controller/BookController.php');
- require_once('../model/Book.php');
+require_once('../model/Book.php');
  $controller = new BookController();
  $model = new Book();
     if(empty($_GET['q'])) {

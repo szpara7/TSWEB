@@ -33,7 +33,6 @@ class AuthorsList extends React.Component {
                 <table className="table table-dark">
                     <thead>
                         <tr>
-                            <th>Id</th>
                             <th>Imie</th>
                             <th>Nazwisko</th>
                             <th>Akcje</th>

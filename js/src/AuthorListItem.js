@@ -11,7 +11,6 @@ class AuthorListItem extends React.Component {
     render() {
         return(                   
             <tr>
-                <td>{this.props.author.id}</td>
                 <td>{this.props.author.first_name}</td>
                 <td>{this.props.author.last_name}</td>
                 <td>                

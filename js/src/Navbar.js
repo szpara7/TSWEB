@@ -7,13 +7,13 @@ class Navbar extends React.Component {
     render(){
         return(
             <div className="m-2 header">
-            <HashRouter>
+         
                 <div className="btn-group-lg">
-                    <a href="#" className="btn btn-dark"><NavLink to = "/"/>Books</a>
-                    <a href="#" className="btn btn-dark"><NavLink to = "/authors"/>Authors</a>
-                    <a href="#" className="btn btn-dark"><NavLink to = "/genre"/>Genres</a>
+                    <NavLink className="btn btn-dark" to = "/">Books</NavLink>
+                    <NavLink className="btn btn-dark" to = "/authors">Authors</NavLink>
+                    <NavLink className="btn btn-dark" to = "/genre">Genres</NavLink>
                 </div>
-            </HashRouter>
+          
             </div>
         )
     }
