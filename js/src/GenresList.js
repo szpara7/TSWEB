@@ -1,5 +1,5 @@
 import React from 'react';
-import AuthorListItem from './AuthorListItem.js';
+import GenreListItem from './GenreListItem.js';
 import CreateButton from './CreateButton.js';
 
 
@@ -11,15 +11,15 @@ class AuthorsList extends React.Component {
 
         this.state = {
             //tu funkcja z ajaxa
-            authors: []
+            genres: []
         }
     }
 
     componentDidMount() {
-        fetch('http://localhost:8080/switcher/AuthorSwitcher.php?q=GetAll')
+        fetch('http://localhost:8080/switcher/GenreSwitcher.php?q=GetAll')
           .then(response => response.json())
           .then(json => {
-            this.setState({ authors: json});
+            this.setState({ genres: json});
           });
         }
 
@@ -27,21 +27,21 @@ class AuthorsList extends React.Component {
         return(
             <div className="col-lg-12">
                 <div className="list_header">
-                    <div className="col-lg-2 float-left align-text-top pt-3 font-weight-bold align-middle">AUTORZY</div>
+                    <div className="col-lg-2 float-left align-text-top pt-3 font-weight-bold align-middle">GATUNKI</div>
                     <div className="offset-lg-8 col-lg-2 pt-3 float-right"><CreateButton/></div>
                 </div>
                 <table className="table table-dark">
                     <thead>
                         <tr>
-                            <th>Imie</th>
-                            <th>Nazwisko</th>
+                            <th>Nazwa gatunku</th>
+                            <th>Liczba książek w gatunku</th>
                             <th>Akcje</th>
                         </tr>
                     </thead>
                     <tbody>
                         {
-                            this.state.authors.map((item,index)=>
-                        <AuthorListItem key={index} author={item}/>)
+                            this.state.genres.map((item,index)=>
+                        <GenreListItem key={index} genre={item}/>)
                         }
                     </tbody>
                 </table>

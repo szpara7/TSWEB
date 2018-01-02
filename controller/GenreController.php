@@ -8,7 +8,7 @@ class GenreController {
     {
         $service = new GenreService();
         $data = $service->GetAll();
-        $author->Disconnect();
+        $service->Disconnect();
         echo json_encode($data);
     }
 
@@ -16,7 +16,7 @@ class GenreController {
     {
         $service = new GenreService();
         $data = $service->GetById($id);
-        $author->Disconnect();
+        $service->Disconnect();
         echo json_encode($data);
     }
 

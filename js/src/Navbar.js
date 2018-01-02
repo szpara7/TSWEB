@@ -11,7 +11,7 @@ class Navbar extends React.Component {
                 <div className="btn-group-lg">
                     <NavLink className="btn btn-dark" to = "/">Books</NavLink>
                     <NavLink className="btn btn-dark" to = "/authors">Authors</NavLink>
-                    <NavLink className="btn btn-dark" to = "/genre">Genres</NavLink>
+                    <NavLink className="btn btn-dark" to = "/genres">Genres</NavLink>
                 </div>
           
             </div>
