@@ -16,7 +16,7 @@ class AuthorController {
     {
         $service = new AuthorService();
         $data = $service->GetById($id);
-        $author->Disconnect();
+        $service->Disconnect();
         echo json_encode($data);
     }
 

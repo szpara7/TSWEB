@@ -2,6 +2,8 @@ import React from 'react';
 import AuthorListItem from './AuthorListItem.js';
 import CreateButton from './CreateButton.js';
 import AddAuthorModal from './AddAuthorModal.js';
+import AuthorDetailsModal from './AuthorDetailsModal.js';
+
 
 
 
@@ -38,11 +40,12 @@ class AuthorsList extends React.Component {
                     <tbody>
                         {
                             this.state.authors.map((item,index)=>
-                        <AuthorListItem update={(id) => this.Delete(id)} key={index} author={item}/>)
+                        <AuthorListItem handleDetailsClick={(author) => this.Details(author)} update={(id) => this.Delete(id)} key={index} author={item}/>)
                         }
                     </tbody>
                 </table>
-                <AddAuthorModal/>
+                <AddAuthorModal/>    
+                <AuthorDetailsModal/>          
             </div>
         )
     }
@@ -66,6 +69,17 @@ class AuthorsList extends React.Component {
           });
     }
 
+    Details(author) {
+
+        $("#detailTitle").text(author.first_name+ ' ' + author.last_name);
+        $("#detailDescritpion").text(author.description);
+        $("#detailBirthDate").text(author.date_birth);
+        $("#detailDeathDate").text(author.date_death);
+        $("#detailNationality").text(author.nationality);
+
+        $('#authorDetailsModal').modal('show');
+
+    }
 
     addAuthor()
     {

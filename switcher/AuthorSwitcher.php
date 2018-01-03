@@ -14,7 +14,7 @@ require_once('../controller/AuthorController.php');
      break;
  
      case 'GetById':
-     $id = json_decode($_POST['id'], false);
+     $id = json_decode($_GET['id'], false);
      $controller->GetById($id);
      break;
  
