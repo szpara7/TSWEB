@@ -8,18 +8,21 @@ class BookListItem extends React.Component {
         super(props);
     }
 
-        render() {
-            return(                   
-                <tr>
-                    <td>{this.props.book.title}</td>
-                    <td>{this.props.book.first_name+ ' ' + this.props.book.last_name}</td>
-                    <td>{this.props.book.name}</td>
-                    <td>                
-                        <UpdateButton/><DeleteButton/><DetailsButton/>
-                    </td>
-                </tr>          
-            )
-        
+    deleteBook() {
+        this.props.deleteBook(this.props.book.id);
+    }
+
+    render() {
+        return(                   
+            <tr>
+                <td>{this.props.book.title}</td>
+                <td>{this.props.book.first_name+ ' ' + this.props.book.last_name}</td>
+                <td>{this.props.book.name}</td>
+                <td>                
+                    <UpdateButton/><DeleteButton onClick={() => this.deleteBook()}/><DetailsButton/>
+                </td>
+            </tr>          
+        )  
     }
 
 }

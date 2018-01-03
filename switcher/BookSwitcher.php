@@ -28,8 +28,9 @@ require_once('../model/Book.php');
      break;
  
      case 'Delete':
-     $id = json_decode($_POST['id'], false);
+     $id = json_decode($_GET['id'], false);
      $controller->Delete($id);
+     $controller->GetAll();
      break;
  }
 

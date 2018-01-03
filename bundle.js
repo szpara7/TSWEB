@@ -24145,6 +24145,11 @@ var BooksList = function (_React$Component) {
     _createClass(BooksList, [{
         key: 'componentDidMount',
         value: function componentDidMount() {
+            this.Update();
+        }
+    }, {
+        key: 'Update',
+        value: function Update() {
             var _this2 = this;
 
             fetch('http://localhost:8080/switcher/BookSwitcher.php?q=GetAll').then(function (response) {
@@ -24154,8 +24159,22 @@ var BooksList = function (_React$Component) {
             });
         }
     }, {
+        key: 'Delete',
+        value: function Delete(id) {
+            var _this3 = this;
+
+            fetch('http://localhost:8080/switcher/BookSwitcher.php?q=Delete&id=' + id).then(function (response) {
+                return response.json();
+            }).then(function (response) {
+                _this3.setState({ books: response });
+            });
+            alert("Usunięto rekord");
+        }
+    }, {
         key: 'render',
         value: function render() {
+            var _this4 = this;
+
             return _react2.default.createElement(
                 'div',
                 { className: 'col-lg-12' },
@@ -24208,7 +24227,9 @@ var BooksList = function (_React$Component) {
                         'tbody',
                         null,
                         this.state.books.map(function (item, index) {
-                            return _react2.default.createElement(_BookListItem2.default, { key: index, book: item });
+                            return _react2.default.createElement(_BookListItem2.default, { deleteBook: function deleteBook(id) {
+                                    return _this4.Delete(id);
+                                }, key: index, book: item });
                         })
                     )
                 )
@@ -24268,8 +24289,15 @@ var BookListItem = function (_React$Component) {
     }
 
     _createClass(BookListItem, [{
+        key: 'deleteBook',
+        value: function deleteBook() {
+            this.props.deleteBook(this.props.book.id);
+        }
+    }, {
         key: 'render',
         value: function render() {
+            var _this2 = this;
+
             return _react2.default.createElement(
                 'tr',
                 null,
@@ -24292,7 +24320,9 @@ var BookListItem = function (_React$Component) {
                     'td',
                     null,
                     _react2.default.createElement(_UpdateButton2.default, null),
-                    _react2.default.createElement(_DeleteButton2.default, null),
+                    _react2.default.createElement(_DeleteButton2.default, { onClick: function onClick() {
+                            return _this2.deleteBook();
+                        } }),
                     _react2.default.createElement(_DetailsButton2.default, null)
                 )
             );

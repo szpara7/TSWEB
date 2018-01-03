@@ -12,11 +12,24 @@ class BooksList extends React.Component {
         }
     }
     componentDidMount() {
+       this.Update();
+    }
+
+    Update() {
         fetch('http://localhost:8080/switcher/BookSwitcher.php?q=GetAll')
-            .then(response => response.json())
-            .then(response => {
-                this.setState({books: response});
-            });
+        .then(response => response.json())
+        .then(response => {
+            this.setState({books: response});
+        });
+    }
+
+    Delete(id) {
+        fetch('http://localhost:8080/switcher/BookSwitcher.php?q=Delete&id='+id)
+        .then(response => response.json())
+        .then(response => {
+            this.setState({books: response});
+        });
+        alert("Usunięto rekord");
     }
 
     render () {
@@ -38,7 +51,7 @@ class BooksList extends React.Component {
                     <tbody>
                         {
                             this.state.books.map((item,index)=>
-                        <BookListItem key={index} book={item}/>)
+                        <BookListItem deleteBook={(id) => this.Delete(id)} key={index} book={item}/>)
                         }
                     </tbody>
                 </table>
