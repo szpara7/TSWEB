@@ -16,12 +16,25 @@ class AuthorsList extends React.Component {
     }
 
     componentDidMount() {
+         this.Update();
+    }
+
+    Update() {
         fetch('http://localhost:8080/switcher/GenreSwitcher.php?q=GetAll')
-          .then(response => response.json())
-          .then(json => {
+        .then(response => response.json())
+        .then(json => {
             this.setState({ genres: json});
-          });
-        }
+        });
+    }
+
+    Delete(id) {
+        fetch('http://localhost:8080/switcher/GenreSwitcher.php?q=Delete&id='+id)
+       .then(res => res.json())
+       .then(json => {
+            this.setState({ genres: json});
+       });
+       alert('Usunięto rekord');
+    }
 
     render() {
         return(
@@ -41,7 +54,7 @@ class AuthorsList extends React.Component {
                     <tbody>
                         {
                             this.state.genres.map((item,index)=>
-                        <GenreListItem key={index} genre={item}/>)
+                        <GenreListItem deleteGenre={(id) => this.Delete(id)} key={index} genre={item}/>)
                         }
                     </tbody>
                 </table>

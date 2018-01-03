@@ -24355,6 +24355,11 @@ var AuthorsList = function (_React$Component) {
     _createClass(AuthorsList, [{
         key: 'componentDidMount',
         value: function componentDidMount() {
+            this.Update();
+        }
+    }, {
+        key: 'Update',
+        value: function Update() {
             var _this2 = this;
 
             fetch('http://localhost:8080/switcher/GenreSwitcher.php?q=GetAll').then(function (response) {
@@ -24364,8 +24369,22 @@ var AuthorsList = function (_React$Component) {
             });
         }
     }, {
+        key: 'Delete',
+        value: function Delete(id) {
+            var _this3 = this;
+
+            fetch('http://localhost:8080/switcher/GenreSwitcher.php?q=Delete&id=' + id).then(function (res) {
+                return res.json();
+            }).then(function (json) {
+                _this3.setState({ genres: json });
+            });
+            alert('Usunięto rekord');
+        }
+    }, {
         key: 'render',
         value: function render() {
+            var _this4 = this;
+
             return _react2.default.createElement(
                 'div',
                 { className: 'col-lg-12' },
@@ -24413,7 +24432,9 @@ var AuthorsList = function (_React$Component) {
                         'tbody',
                         null,
                         this.state.genres.map(function (item, index) {
-                            return _react2.default.createElement(_GenreListItem2.default, { key: index, genre: item });
+                            return _react2.default.createElement(_GenreListItem2.default, { deleteGenre: function deleteGenre(id) {
+                                    return _this4.Delete(id);
+                                }, key: index, genre: item });
                         })
                     )
                 )
@@ -24473,8 +24494,15 @@ var GenreListItem = function (_React$Component) {
     }
 
     _createClass(GenreListItem, [{
+        key: 'deleteGenre',
+        value: function deleteGenre() {
+            this.props.deleteGenre(this.props.genre.id);
+        }
+    }, {
         key: 'render',
         value: function render() {
+            var _this2 = this;
+
             return _react2.default.createElement(
                 'tr',
                 null,
@@ -24492,7 +24520,9 @@ var GenreListItem = function (_React$Component) {
                     'td',
                     null,
                     _react2.default.createElement(_UpdateButton2.default, null),
-                    _react2.default.createElement(_DeleteButton2.default, null),
+                    _react2.default.createElement(_DeleteButton2.default, { onClick: function onClick() {
+                            return _this2.deleteGenre();
+                        } }),
                     _react2.default.createElement(_DetailsButton2.default, null)
                 )
             );

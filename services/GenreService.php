@@ -17,7 +17,7 @@ class GenreService extends Database
     public function GetAll()
     {
         $model = new Genre();
-        $query = 'SELECT g.id, g.name, count(b.id) as \'count\' from genre g left Join book b on b.genre_id=g.id GROUP by g.name';
+        $query = 'SELECT g.id, g.name, count(b.id) as \'count\' from genre g left Join book b on b.genre_id=g.id GROUP by g.id';
         $stmt = $this->connection->prepare($query);
         $stmt->execute();
         //$result = $stmt->setFetchMode(PDO::FETCH_ASSOC);        
