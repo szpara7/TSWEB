@@ -3,6 +3,7 @@ import BookListItem from './BookListItem.js';
 import CreateButton from './CreateButton.js';
 import DeleteButton from './DeleteButton.js';
 import UpdateButton from './UpdateButton.js';
+import BookDetailsModal from './BookDetailsModal.js';
 
 class BooksList extends React.Component {
     constructor(props) {
@@ -32,6 +33,19 @@ class BooksList extends React.Component {
         alert("Usunięto rekord");
     }
 
+    Details(book) {
+
+        $("#detailTitleBook").text(book.title);
+        $("#detailDescritpionBook").text(book.description);
+        $("#detailISBN").text(book.isbn);
+        $("#detailPageCount").text(book.page_count);
+        $("#detailYear").text(book.year);
+        $("#detailAuthor").text(book.first_name + ' ' + book.last_name);
+
+        $('#bookDetailsModal').modal('show');
+
+    }
+
     render () {
         return(
             <div className="col-lg-12">
@@ -51,10 +65,11 @@ class BooksList extends React.Component {
                     <tbody>
                         {
                             this.state.books.map((item,index)=>
-                        <BookListItem deleteBook={(id) => this.Delete(id)} key={index} book={item}/>)
+                        <BookListItem handleDetailsClick={(book) => this.Details(book)} deleteBook={(id) => this.Delete(id)} key={index} book={item}/>)
                         }
                     </tbody>
                 </table>
+                <BookDetailsModal/>
             </div>
         )
     }

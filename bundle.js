@@ -2814,7 +2814,7 @@ var _BooksList = __webpack_require__(85);
 
 var _BooksList2 = _interopRequireDefault(_BooksList);
 
-var _GenresList = __webpack_require__(87);
+var _GenresList = __webpack_require__(88);
 
 var _GenresList2 = _interopRequireDefault(_GenresList);
 
@@ -23799,17 +23799,17 @@ var Navbar = function (_React$Component) {
                     _react2.default.createElement(
                         _reactRouterDom.NavLink,
                         { className: 'btn btn-dark', to: '/' },
-                        'Books'
+                        'KSI\u0104\u017BKI'
                     ),
                     _react2.default.createElement(
                         _reactRouterDom.NavLink,
                         { className: 'btn btn-dark', to: '/authors' },
-                        'Authors'
+                        'AUTORZY'
                     ),
                     _react2.default.createElement(
                         _reactRouterDom.NavLink,
                         { className: 'btn btn-dark', to: '/genres' },
-                        'Genres'
+                        'GATUNKI'
                     )
                 )
             );
@@ -24298,6 +24298,10 @@ var _UpdateButton = __webpack_require__(13);
 
 var _UpdateButton2 = _interopRequireDefault(_UpdateButton);
 
+var _BookDetailsModal = __webpack_require__(87);
+
+var _BookDetailsModal2 = _interopRequireDefault(_BookDetailsModal);
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -24347,6 +24351,19 @@ var BooksList = function (_React$Component) {
                 _this3.setState({ books: response });
             });
             alert("Usunięto rekord");
+        }
+    }, {
+        key: 'Details',
+        value: function Details(book) {
+
+            $("#detailTitleBook").text(book.title);
+            $("#detailDescritpionBook").text(book.description);
+            $("#detailISBN").text(book.isbn);
+            $("#detailPageCount").text(book.page_count);
+            $("#detailYear").text(book.year);
+            $("#detailAuthor").text(book.first_name + ' ' + book.last_name);
+
+            $('#bookDetailsModal').modal('show');
         }
     }, {
         key: 'render',
@@ -24405,12 +24422,15 @@ var BooksList = function (_React$Component) {
                         'tbody',
                         null,
                         this.state.books.map(function (item, index) {
-                            return _react2.default.createElement(_BookListItem2.default, { deleteBook: function deleteBook(id) {
+                            return _react2.default.createElement(_BookListItem2.default, { handleDetailsClick: function handleDetailsClick(book) {
+                                    return _this4.Details(book);
+                                }, deleteBook: function deleteBook(id) {
                                     return _this4.Delete(id);
                                 }, key: index, book: item });
                         })
                     )
-                )
+                ),
+                _react2.default.createElement(_BookDetailsModal2.default, null)
             );
         }
     }]);
@@ -24472,6 +24492,11 @@ var BookListItem = function (_React$Component) {
             this.props.deleteBook(this.props.book.id);
         }
     }, {
+        key: 'handleDetailsClick',
+        value: function handleDetailsClick() {
+            this.props.handleDetailsClick(this.props.book);
+        }
+    }, {
         key: 'render',
         value: function render() {
             var _this2 = this;
@@ -24501,7 +24526,9 @@ var BookListItem = function (_React$Component) {
                     _react2.default.createElement(_DeleteButton2.default, { onClick: function onClick() {
                             return _this2.deleteBook();
                         } }),
-                    _react2.default.createElement(_DetailsButton2.default, null)
+                    _react2.default.createElement(_DetailsButton2.default, { handleDetailsClick: function handleDetailsClick() {
+                            return _this2.handleDetailsClick();
+                        } })
                 )
             );
         }
@@ -24529,7 +24556,161 @@ var _react = __webpack_require__(0);
 
 var _react2 = _interopRequireDefault(_react);
 
-var _GenreListItem = __webpack_require__(88);
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+var BookDetailsModal = function (_React$Component) {
+    _inherits(BookDetailsModal, _React$Component);
+
+    function BookDetailsModal(props) {
+        _classCallCheck(this, BookDetailsModal);
+
+        return _possibleConstructorReturn(this, (BookDetailsModal.__proto__ || Object.getPrototypeOf(BookDetailsModal)).call(this, props));
+    }
+
+    _createClass(BookDetailsModal, [{
+        key: "render",
+        value: function render() {
+            return _react2.default.createElement(
+                "div",
+                { className: "modal fade", id: "bookDetailsModal" },
+                _react2.default.createElement(
+                    "div",
+                    { className: "modal-dialog modal-sm" },
+                    _react2.default.createElement(
+                        "div",
+                        { className: "modal-content" },
+                        _react2.default.createElement(
+                            "div",
+                            { className: "modal-header" },
+                            _react2.default.createElement("h4", { className: "modal-title", id: "detailTitleBook" }),
+                            _react2.default.createElement(
+                                "button",
+                                { type: "button", className: "close btn-danger", "data-dismiss": "modal" },
+                                "\xD7"
+                            )
+                        ),
+                        _react2.default.createElement(
+                            "div",
+                            { className: "modal-body container" },
+                            _react2.default.createElement(
+                                "form",
+                                { className: "form-horizontal row" },
+                                _react2.default.createElement(
+                                    "div",
+                                    { className: "form-group col-lg-12" },
+                                    _react2.default.createElement(
+                                        "label",
+                                        { className: "control-label col-lg-6 font-weight-bold" },
+                                        "Autor:"
+                                    ),
+                                    _react2.default.createElement(
+                                        "div",
+                                        { className: "col-lg-6" },
+                                        _react2.default.createElement("p", { className: "form-control-static", id: "detailAuthor" })
+                                    )
+                                ),
+                                _react2.default.createElement(
+                                    "div",
+                                    { className: "form-group col-lg-12" },
+                                    _react2.default.createElement(
+                                        "label",
+                                        { className: "control-label col-lg-2 font-weight-bold" },
+                                        "Rok wydania:"
+                                    ),
+                                    _react2.default.createElement(
+                                        "div",
+                                        { className: "col-lg-10" },
+                                        _react2.default.createElement("p", { className: "form-control-static", id: "detailYear" })
+                                    )
+                                ),
+                                _react2.default.createElement(
+                                    "div",
+                                    { className: "form-group col-lg-12" },
+                                    _react2.default.createElement(
+                                        "label",
+                                        { className: "control-label col-lg-2 font-weight-bold" },
+                                        "Ilo\u015B\u0107 stron:"
+                                    ),
+                                    _react2.default.createElement(
+                                        "div",
+                                        { className: "col-lg-10" },
+                                        _react2.default.createElement("p", { className: "form-control-static ", id: "detailPageCount" })
+                                    )
+                                ),
+                                _react2.default.createElement(
+                                    "div",
+                                    { className: "form-group col-lg-12" },
+                                    _react2.default.createElement(
+                                        "label",
+                                        { className: "control-label col-lg-2 font-weight-bold" },
+                                        "ISBN:"
+                                    ),
+                                    _react2.default.createElement(
+                                        "div",
+                                        { className: "col-lg-10" },
+                                        _react2.default.createElement("p", { className: "form-control-static", id: "detailISBN" })
+                                    )
+                                ),
+                                _react2.default.createElement(
+                                    "div",
+                                    { className: "form-group col-lg-12" },
+                                    _react2.default.createElement(
+                                        "label",
+                                        { className: "control-label col-lg-2 font-weight-bold" },
+                                        "Opis:"
+                                    ),
+                                    _react2.default.createElement(
+                                        "div",
+                                        { className: "col-lg-10" },
+                                        _react2.default.createElement("p", { className: "form-control-static", id: "detailDescritpionBook" })
+                                    )
+                                )
+                            )
+                        ),
+                        _react2.default.createElement(
+                            "div",
+                            { className: "modal-footer" },
+                            _react2.default.createElement(
+                                "button",
+                                { type: "button", className: "btn btn-outline-danger", "data-dismiss": "modal" },
+                                "Zamknij"
+                            )
+                        )
+                    )
+                )
+            );
+        }
+    }]);
+
+    return BookDetailsModal;
+}(_react2.default.Component);
+
+exports.default = BookDetailsModal;
+
+/***/ }),
+/* 88 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+var _react = __webpack_require__(0);
+
+var _react2 = _interopRequireDefault(_react);
+
+var _GenreListItem = __webpack_require__(89);
 
 var _GenreListItem2 = _interopRequireDefault(_GenreListItem);
 
@@ -24656,7 +24837,7 @@ var AuthorsList = function (_React$Component) {
 exports.default = AuthorsList;
 
 /***/ }),
-/* 88 */
+/* 89 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -24730,8 +24911,7 @@ var GenreListItem = function (_React$Component) {
                     _react2.default.createElement(_UpdateButton2.default, null),
                     _react2.default.createElement(_DeleteButton2.default, { onClick: function onClick() {
                             return _this2.deleteGenre();
-                        } }),
-                    _react2.default.createElement(_DetailsButton2.default, null)
+                        } })
                 )
             );
         }

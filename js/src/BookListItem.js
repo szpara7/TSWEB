@@ -12,6 +12,10 @@ class BookListItem extends React.Component {
         this.props.deleteBook(this.props.book.id);
     }
 
+    handleDetailsClick() {
+        this.props.handleDetailsClick(this.props.book);
+    }
+
     render() {
         return(                   
             <tr>
@@ -19,7 +23,7 @@ class BookListItem extends React.Component {
                 <td>{this.props.book.first_name+ ' ' + this.props.book.last_name}</td>
                 <td>{this.props.book.name}</td>
                 <td>                
-                    <UpdateButton/><DeleteButton onClick={() => this.deleteBook()}/><DetailsButton/>
+                    <UpdateButton/><DeleteButton onClick={() => this.deleteBook()}/><DetailsButton handleDetailsClick={() => this.handleDetailsClick()}/>
                 </td>
             </tr>          
         )  

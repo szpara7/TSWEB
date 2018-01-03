@@ -9,9 +9,9 @@ class Navbar extends React.Component {
             <div className="m-2 header">
          
                 <div className="btn-group-lg">
-                    <NavLink className="btn btn-dark" to = "/">Books</NavLink>
-                    <NavLink className="btn btn-dark" to = "/authors">Authors</NavLink>
-                    <NavLink className="btn btn-dark" to = "/genres">Genres</NavLink>
+                    <NavLink className="btn btn-dark" to = "/">KSIĄŻKI</NavLink>
+                    <NavLink className="btn btn-dark" to = "/authors">AUTORZY</NavLink>
+                    <NavLink className="btn btn-dark" to = "/genres">GATUNKI</NavLink>
                 </div>
           
             </div>

@@ -19,7 +19,7 @@ class GenreListItem extends React.Component {
                 <td>{this.props.genre.name}</td>
                 <td>{this.props.genre.count}</td>
                 <td>                
-                    <UpdateButton/><DeleteButton onClick={() => this.deleteGenre()}/><DetailsButton/>
+                    <UpdateButton/><DeleteButton onClick={() => this.deleteGenre()}/>
                 </td>
             </tr>          
         )                
