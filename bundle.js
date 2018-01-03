@@ -1024,9 +1024,13 @@ var DeleteButton = function (_React$Component) {
     _createClass(DeleteButton, [{
         key: "render",
         value: function render() {
+            var _this2 = this;
+
             return _react2.default.createElement(
                 "a",
-                { className: "btn btn-dark btn-sm border border-danger" },
+                { className: "btn btn-dark btn-sm border border-danger", onClick: function onClick() {
+                        return _this2.props.onClick();
+                    } },
                 _react2.default.createElement("span", { className: "glyphicon glyphicon-plus" }),
                 "Usu\u0144"
             );
@@ -1681,7 +1685,7 @@ var CreateButton = function (_React$Component) {
         value: function render() {
             return _react2.default.createElement(
                 "a",
-                { className: "btn btn-dark btn-block" },
+                { className: "btn btn-dark btn-block border border-success", "data-toggle": "modal", "data-target": this.props.modalId },
                 _react2.default.createElement("span", { className: "glyphicon glyphicon-plus" }),
                 "Dodaj"
             );
@@ -2657,11 +2661,11 @@ var _AuthorsList = __webpack_require__(81);
 
 var _AuthorsList2 = _interopRequireDefault(_AuthorsList);
 
-var _BooksList = __webpack_require__(83);
+var _BooksList = __webpack_require__(84);
 
 var _BooksList2 = _interopRequireDefault(_BooksList);
 
-var _GenresList = __webpack_require__(85);
+var _GenresList = __webpack_require__(86);
 
 var _GenresList2 = _interopRequireDefault(_GenresList);
 
@@ -23693,6 +23697,10 @@ var _CreateButton = __webpack_require__(24);
 
 var _CreateButton2 = _interopRequireDefault(_CreateButton);
 
+var _AddAuthorModal = __webpack_require__(83);
+
+var _AddAuthorModal2 = _interopRequireDefault(_AddAuthorModal);
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -23719,17 +23727,13 @@ var AuthorsList = function (_React$Component) {
     _createClass(AuthorsList, [{
         key: 'componentDidMount',
         value: function componentDidMount() {
-            var _this2 = this;
-
-            fetch('http://localhost:8080/switcher/AuthorSwitcher.php?q=GetAll').then(function (response) {
-                return response.json();
-            }).then(function (json) {
-                _this2.setState({ authors: json });
-            });
+            this.Update();
         }
     }, {
         key: 'render',
         value: function render() {
+            var _this2 = this;
+
             return _react2.default.createElement(
                 'div',
                 { className: 'col-lg-12' },
@@ -23743,8 +23747,8 @@ var AuthorsList = function (_React$Component) {
                     ),
                     _react2.default.createElement(
                         'div',
-                        { className: 'offset-lg-8 col-lg-2 pt-3 float-right' },
-                        _react2.default.createElement(_CreateButton2.default, null)
+                        { className: 'offset-lg-8 col-lg-2 pt-2 float-right' },
+                        _react2.default.createElement(_CreateButton2.default, { modalId: '#addAuthorModal' })
                     )
                 ),
                 _react2.default.createElement(
@@ -23777,11 +23781,63 @@ var AuthorsList = function (_React$Component) {
                         'tbody',
                         null,
                         this.state.authors.map(function (item, index) {
-                            return _react2.default.createElement(_AuthorListItem2.default, { key: index, author: item });
+                            return _react2.default.createElement(_AuthorListItem2.default, { update: function update(id) {
+                                    return _this2.Delete(id);
+                                }, key: index, author: item });
                         })
                     )
-                )
+                ),
+                _react2.default.createElement(_AddAuthorModal2.default, null)
             );
+        }
+    }, {
+        key: 'Delete',
+        value: function Delete(id) {
+            var _this3 = this;
+
+            fetch('http://localhost:8080/switcher/AuthorSwitcher.php?q=Delete&id=' + id).then(function (res) {
+                return res.json();
+            }).then(function (json) {
+                _this3.setState({ authors: json });
+            });
+            alert('Usunięto rekord');
+        }
+    }, {
+        key: 'Update',
+        value: function Update() {
+            var _this4 = this;
+
+            fetch('http://localhost:8080/switcher/AuthorSwitcher.php?q=GetAll').then(function (response) {
+                return response.json();
+            }).then(function (json) {
+                _this4.setState({ authors: json });
+            });
+        }
+    }, {
+        key: 'addAuthor',
+        value: function addAuthor() {
+            // var obj = {
+            //     'first_name' : $('#addAuthorFirstName').val(),
+            //     'last_name' :  $('#addAuthorLasttName').val(),
+            //     'birth_date':  $('#addAuthorBirthDate').val(),
+            //     'death_date' :  $('#addAuthorDeathDate').val(),
+            //     'nationality' :  $('#addAuthorNationality').val(),
+            //     'biography' :  $('#addAuthorDescription').val(),
+            // };
+
+            // var obj = {
+            //     first_name : 'NOWY',
+            //     last_name :  'NOWY',
+            //     nationality :  'NOWY',
+            //     description :  'NOWY',
+            // };
+            var first_name = "JSDJJ";
+            fetch('http://localhost:8080/switcher/AuthorSwitcher.php?q=Add', {
+                method: 'POST',
+                body: first_name
+            }).catch(function (e) {
+                return alert(e);
+            });
         }
     }]);
 
@@ -23837,8 +23893,16 @@ var AuthorListItem = function (_React$Component) {
     }
 
     _createClass(AuthorListItem, [{
+        key: 'deleteAuthor',
+        value: function deleteAuthor() {
+
+            this.props.update(this.props.author.id);
+        }
+    }, {
         key: 'render',
         value: function render() {
+            var _this2 = this;
+
             return _react2.default.createElement(
                 'tr',
                 null,
@@ -23856,7 +23920,9 @@ var AuthorListItem = function (_React$Component) {
                     'td',
                     null,
                     _react2.default.createElement(_UpdateButton2.default, null),
-                    _react2.default.createElement(_DeleteButton2.default, null),
+                    _react2.default.createElement(_DeleteButton2.default, { onClick: function onClick() {
+                            return _this2.deleteAuthor();
+                        } }),
                     _react2.default.createElement(_DetailsButton2.default, null)
                 )
             );
@@ -23885,7 +23951,160 @@ var _react = __webpack_require__(0);
 
 var _react2 = _interopRequireDefault(_react);
 
-var _BookListItem = __webpack_require__(84);
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+var AddAuthorModal = function (_React$Component) {
+    _inherits(AddAuthorModal, _React$Component);
+
+    function AddAuthorModal() {
+        _classCallCheck(this, AddAuthorModal);
+
+        return _possibleConstructorReturn(this, (AddAuthorModal.__proto__ || Object.getPrototypeOf(AddAuthorModal)).apply(this, arguments));
+    }
+
+    _createClass(AddAuthorModal, [{
+        key: "render",
+        value: function render() {
+            return _react2.default.createElement(
+                "div",
+                { className: "modal fade", id: "addAuthorModal" },
+                _react2.default.createElement(
+                    "div",
+                    { className: "modal-dialog modal-lg" },
+                    _react2.default.createElement(
+                        "div",
+                        { className: "modal-content" },
+                        _react2.default.createElement(
+                            "div",
+                            { className: "modal-header" },
+                            _react2.default.createElement(
+                                "h4",
+                                { className: "modal-title" },
+                                "Dodaj autora"
+                            ),
+                            _react2.default.createElement(
+                                "button",
+                                { type: "button", className: "close btn-danger", "data-dismiss": "modal" },
+                                "\xD7"
+                            )
+                        ),
+                        _react2.default.createElement(
+                            "form",
+                            { id: "addAuthorForm", method: "POST" },
+                            _react2.default.createElement(
+                                "div",
+                                { className: "modal-body" },
+                                _react2.default.createElement(
+                                    "div",
+                                    { className: "form-group" },
+                                    _react2.default.createElement(
+                                        "label",
+                                        null,
+                                        "Imi\u0119:"
+                                    ),
+                                    _react2.default.createElement("input", { type: "text", className: "form-control", id: "addAuthorFirstName", placeholder: "Imi\u0119", name: "first_name", required: true })
+                                ),
+                                _react2.default.createElement(
+                                    "div",
+                                    { "class": "form-group" },
+                                    _react2.default.createElement(
+                                        "label",
+                                        null,
+                                        "Nazwisko:"
+                                    ),
+                                    _react2.default.createElement("input", { type: "text", className: "form-control", id: "addAuthorLastName", placeholder: "Nazwisko", name: "last_name", required: true })
+                                ),
+                                _react2.default.createElement(
+                                    "div",
+                                    { "class": "form-group" },
+                                    _react2.default.createElement(
+                                        "label",
+                                        null,
+                                        "Data urodzenia:"
+                                    ),
+                                    _react2.default.createElement("input", { type: "date", className: "form-control", id: "addAuthorDateBirth", placeholder: "Data urodzenia", name: "date_birth", required: true })
+                                ),
+                                _react2.default.createElement(
+                                    "div",
+                                    { "class": "form-group" },
+                                    _react2.default.createElement(
+                                        "label",
+                                        null,
+                                        "Data \u015Bmierci:"
+                                    ),
+                                    _react2.default.createElement("input", { type: "date", className: "form-control", id: "addAuthorDeathBirth", placeholder: "Data \u015Bmierci" })
+                                ),
+                                _react2.default.createElement(
+                                    "div",
+                                    { "class": "form-group" },
+                                    _react2.default.createElement(
+                                        "label",
+                                        null,
+                                        "Narodowo\u015B\u0107:"
+                                    ),
+                                    _react2.default.createElement("input", { type: "text", className: "form-control", id: "addAuthorNationality", placeholder: "Narodowo\u015B\u0107", name: "nationality", required: true })
+                                ),
+                                _react2.default.createElement(
+                                    "div",
+                                    { "class": "form-group" },
+                                    _react2.default.createElement(
+                                        "label",
+                                        null,
+                                        "\u017Byciorys:"
+                                    ),
+                                    _react2.default.createElement("textarea", { type: "text", className: "form-control", id: "addAuthorDescription", placeholder: "\u017Byciorys", name: "description", required: true })
+                                )
+                            ),
+                            _react2.default.createElement(
+                                "div",
+                                { className: "modal-footer" },
+                                _react2.default.createElement(
+                                    "button",
+                                    { type: "button", className: "btn btn-outline-danger", "data-dismiss": "modal" },
+                                    "Anuluj"
+                                ),
+                                _react2.default.createElement(
+                                    "button",
+                                    { type: "submit", className: "btn btn-outline-success", "data-dismiss": "modal" },
+                                    "Dodaj"
+                                )
+                            )
+                        )
+                    )
+                )
+            );
+        }
+    }]);
+
+    return AddAuthorModal;
+}(_react2.default.Component);
+
+exports.default = AddAuthorModal;
+
+/***/ }),
+/* 84 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+var _react = __webpack_require__(0);
+
+var _react2 = _interopRequireDefault(_react);
+
+var _BookListItem = __webpack_require__(85);
 
 var _BookListItem2 = _interopRequireDefault(_BookListItem);
 
@@ -23950,7 +24169,7 @@ var BooksList = function (_React$Component) {
                     ),
                     _react2.default.createElement(
                         'div',
-                        { className: 'offset-lg-8 col-lg-2 pt-3 float-right' },
+                        { className: 'offset-lg-8 col-lg-2 pt-2 float-right' },
                         _react2.default.createElement(_CreateButton2.default, null)
                     )
                 ),
@@ -24003,7 +24222,7 @@ var BooksList = function (_React$Component) {
 exports.default = BooksList;
 
 /***/ }),
-/* 84 */
+/* 85 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -24086,7 +24305,7 @@ var BookListItem = function (_React$Component) {
 exports.default = BookListItem;
 
 /***/ }),
-/* 85 */
+/* 86 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -24102,7 +24321,7 @@ var _react = __webpack_require__(0);
 
 var _react2 = _interopRequireDefault(_react);
 
-var _GenreListItem = __webpack_require__(86);
+var _GenreListItem = __webpack_require__(87);
 
 var _GenreListItem2 = _interopRequireDefault(_GenreListItem);
 
@@ -24160,7 +24379,7 @@ var AuthorsList = function (_React$Component) {
                     ),
                     _react2.default.createElement(
                         'div',
-                        { className: 'offset-lg-8 col-lg-2 pt-3 float-right' },
+                        { className: 'offset-lg-8 col-lg-2 pt-2 float-right' },
                         _react2.default.createElement(_CreateButton2.default, null)
                     )
                 ),
@@ -24208,7 +24427,7 @@ var AuthorsList = function (_React$Component) {
 exports.default = AuthorsList;
 
 /***/ }),
-/* 86 */
+/* 87 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";

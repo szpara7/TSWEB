@@ -4,7 +4,7 @@ class DeleteButton extends React.Component {
 
     render() {
         return (
-            <a className="btn btn-dark btn-sm border border-danger"><span className="glyphicon glyphicon-plus"></span>Usuń</a>
+            <a className="btn btn-dark btn-sm border border-danger" onClick={() => this.props.onClick()}><span className="glyphicon glyphicon-plus"></span>Usuń</a>
         )
     }
 }

@@ -24,7 +24,7 @@ class BooksList extends React.Component {
             <div className="col-lg-12">
                 <div className="list_header">
                     <div className="col-lg-2 float-left align-text-top pt-3 font-weight-bold align-middle">KSIĄŻKI</div>
-                    <div className="offset-lg-8 col-lg-2 pt-3 float-right"><CreateButton/></div>
+                    <div className="offset-lg-8 col-lg-2 pt-2 float-right"><CreateButton/></div>
                 </div>
                 <table className="table table-dark">
                     <thead>

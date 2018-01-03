@@ -7,6 +7,11 @@ class AuthorListItem extends React.Component {
     constructor(props) {
         super(props);
     }
+    deleteAuthor()
+    {
+       
+       this.props.update(this.props.author.id);
+    }
 
     render() {
         return(                   
@@ -14,12 +19,11 @@ class AuthorListItem extends React.Component {
                 <td>{this.props.author.first_name}</td>
                 <td>{this.props.author.last_name}</td>
                 <td>                
-                    <UpdateButton/><DeleteButton/><DetailsButton/>
+                    <UpdateButton/><DeleteButton onClick={() => this.deleteAuthor()}/><DetailsButton/>
                 </td>
             </tr>          
         )
-    }
-
+    }   
 }
 
 
