@@ -24771,6 +24771,10 @@ var _CreateButton = __webpack_require__(24);
 
 var _CreateButton2 = _interopRequireDefault(_CreateButton);
 
+var _AddGenreModal = __webpack_require__(90);
+
+var _AddGenreModal2 = _interopRequireDefault(_AddGenreModal);
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -24791,6 +24795,8 @@ var AuthorsList = function (_React$Component) {
             //tu funkcja z ajaxa
             genres: []
         };
+
+        _this.AddGenre = _this.AddGenre.bind(_this);
         return _this;
     }
 
@@ -24823,6 +24829,30 @@ var AuthorsList = function (_React$Component) {
             alert('Usunięto rekord');
         }
     }, {
+        key: 'AddGenre',
+        value: function AddGenre(genre) {
+
+            var self = this;
+            $.ajax({
+                type: "POST",
+                url: "switcher/GenreSwitcher.php?q=Add",
+                data: {
+                    name: genre.name
+                },
+                success: function success(data) {
+                    var genresData = JSON.parse(data);
+                    $("#addGenreModal").modal('hide');
+                    alert("Dodano nowy rekord");
+                    self.setState({
+                        genres: genresData
+                    });
+                },
+                error: function error() {
+                    alert('Wystąpił błąd podczas dodawania rekordu!');
+                }
+            });
+        }
+    }, {
         key: 'render',
         value: function render() {
             var _this4 = this;
@@ -24841,7 +24871,7 @@ var AuthorsList = function (_React$Component) {
                     _react2.default.createElement(
                         'div',
                         { className: 'offset-lg-8 col-lg-2 pt-2 float-right' },
-                        _react2.default.createElement(_CreateButton2.default, null)
+                        _react2.default.createElement(_CreateButton2.default, { modalId: '#addGenreModal' })
                     )
                 ),
                 _react2.default.createElement(
@@ -24879,7 +24909,10 @@ var AuthorsList = function (_React$Component) {
                                 }, key: index, genre: item });
                         })
                     )
-                )
+                ),
+                _react2.default.createElement(_AddGenreModal2.default, { addGenre: function addGenre(item) {
+                        return _this4.AddGenre(item);
+                    } })
             );
         }
     }]);
@@ -24974,6 +25007,141 @@ var GenreListItem = function (_React$Component) {
 }(_react2.default.Component);
 
 exports.default = GenreListItem;
+
+/***/ }),
+/* 90 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+var _react = __webpack_require__(0);
+
+var _react2 = _interopRequireDefault(_react);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+var AddGenreModal = function (_React$Component) {
+    _inherits(AddGenreModal, _React$Component);
+
+    function AddGenreModal(props) {
+        _classCallCheck(this, AddGenreModal);
+
+        var _this = _possibleConstructorReturn(this, (AddGenreModal.__proto__ || Object.getPrototypeOf(AddGenreModal)).call(this, props));
+
+        _this.state = {
+            name: ''
+        };
+        _this.handleInputChange = _this.handleInputChange.bind(_this);
+        _this.handleSubmit = _this.handleSubmit.bind(_this);
+        return _this;
+    }
+
+    _createClass(AddGenreModal, [{
+        key: 'handleInputChange',
+        value: function handleInputChange(event) {
+
+            var value = event.target.value;
+            var name = event.target.name;
+
+            this.setState(_defineProperty({}, name, value));
+        }
+    }, {
+        key: 'handleSubmit',
+        value: function handleSubmit(e) {
+            var obj = {
+                name: this.state.name
+            };
+
+            e.preventDefault();
+            this.props.addGenre(obj);
+
+            this.setState({
+                name: ''
+            });
+        }
+    }, {
+        key: 'render',
+        value: function render() {
+            return _react2.default.createElement(
+                'div',
+                { className: 'modal fade', id: 'addGenreModal' },
+                _react2.default.createElement(
+                    'div',
+                    { className: 'modal-dialog modal-sm' },
+                    _react2.default.createElement(
+                        'div',
+                        { className: 'modal-content' },
+                        _react2.default.createElement(
+                            'div',
+                            { className: 'modal-header' },
+                            _react2.default.createElement(
+                                'h4',
+                                { className: 'modal-title' },
+                                'Dodaj gatunek'
+                            ),
+                            _react2.default.createElement(
+                                'button',
+                                { type: 'button', className: 'close btn-danger', 'data-dismiss': 'modal' },
+                                '\xD7'
+                            )
+                        ),
+                        _react2.default.createElement(
+                            'form',
+                            { onSubmit: this.handleSubmit },
+                            _react2.default.createElement(
+                                'div',
+                                { className: 'modal-body' },
+                                _react2.default.createElement(
+                                    'div',
+                                    { className: 'form-group' },
+                                    _react2.default.createElement(
+                                        'label',
+                                        null,
+                                        'Nazwa gatunku:'
+                                    ),
+                                    _react2.default.createElement('input', { type: 'text', className: 'form-control', value: this.state.name, onChange: this.handleInputChange, name: 'name', required: true })
+                                )
+                            ),
+                            _react2.default.createElement(
+                                'div',
+                                { className: 'modal-footer' },
+                                _react2.default.createElement(
+                                    'button',
+                                    { type: 'button', className: 'btn btn-outline-danger', 'data-dismiss': 'modal' },
+                                    'Anuluj'
+                                ),
+                                _react2.default.createElement(
+                                    'button',
+                                    { type: 'submit', className: 'btn btn-outline-success' },
+                                    'Dodaj'
+                                )
+                            )
+                        )
+                    )
+                )
+            );
+        }
+    }]);
+
+    return AddGenreModal;
+}(_react2.default.Component);
+
+exports.default = AddGenreModal;
 
 /***/ })
 /******/ ]);

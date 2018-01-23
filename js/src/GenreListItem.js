@@ -13,6 +13,7 @@ class GenreListItem extends React.Component {
        this.props.deleteGenre(this.props.genre.id);
     }
 
+
     render() {
         return(                   
             <tr>                   

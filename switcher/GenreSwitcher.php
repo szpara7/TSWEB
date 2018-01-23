@@ -18,8 +18,9 @@ require_once('../controller/GenreController.php');
      break;
  
      case 'Add': 
-     $model = json_decode($_POST['obj'], false); //to raczej nie bedzie dzialalo
+     $model->name = $_POST['name'];
      $controller->Add($model);
+     $controller->GetAll();
      break;
  
      case 'Update':

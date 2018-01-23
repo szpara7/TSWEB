@@ -1,6 +1,7 @@
 import React from 'react';
 import GenreListItem from './GenreListItem.js';
 import CreateButton from './CreateButton.js';
+import AddGenreModal from './AddGenreModal.js';
 
 
 
@@ -13,6 +14,8 @@ class AuthorsList extends React.Component {
             //tu funkcja z ajaxa
             genres: []
         }
+
+        this.AddGenre = this.AddGenre.bind(this);
     }
 
     componentDidMount() {
@@ -36,12 +39,35 @@ class AuthorsList extends React.Component {
        alert('Usunięto rekord');
     }
 
+    AddGenre(genre) {
+
+        var self = this;        
+        $.ajax({
+            type : "POST",
+            url : "switcher/GenreSwitcher.php?q=Add",
+            data : {
+                name : genre.name
+            },
+            success : function(data) {
+                var genresData = JSON.parse(data);
+                $("#addGenreModal").modal('hide');
+                alert("Dodano nowy rekord");  
+                self.setState({
+                    genres: genresData
+                });
+            },
+            error : function() {
+                alert('Wystąpił błąd podczas dodawania rekordu!');
+            }
+        });
+    }
+
     render() {
         return(
             <div className="col-lg-12">
                 <div className="list_header">
                     <div className="col-lg-2 float-left align-text-top pt-3 font-weight-bold align-middle">GATUNKI</div>
-                    <div className="offset-lg-8 col-lg-2 pt-2 float-right"><CreateButton/></div>
+                    <div className="offset-lg-8 col-lg-2 pt-2 float-right"><CreateButton modalId="#addGenreModal"/></div>
                 </div>
                 <table className="table table-dark">
                     <thead>
@@ -58,6 +84,7 @@ class AuthorsList extends React.Component {
                         }
                     </tbody>
                 </table>
+                <AddGenreModal addGenre={(item) => this.AddGenre(item)} />
             </div>
         )
     }
