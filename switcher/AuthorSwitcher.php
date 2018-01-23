@@ -19,23 +19,20 @@ require_once('../controller/AuthorController.php');
      break;
  
      case 'Add':      
-     //$model = json_decode($_POST['obj'], false); //to raczej nie bedzie dzialalo
-    //  $model->first_name = 'IMIE';
-    //  $model->last_name = 'NAZIWKSO';
-    //  $model->description = "DESSSC";
-    //  $model->nationality = 'POLISG';
-
-    $model->first_name = json_decode($_POST['first_name'], false);
-      $model->last_name = json_decode($_POST['last_name'], false);
-      $model->description = json_decode($_POST['description'], false);
-      $model->nationality = json_decode($_POST['nationality'], false);
-      $model->date_birth = $czas->getTimestamp();
-     $controller->Add($model);    
+    $model->first_name = $_POST['first_name'];
+      $model->last_name = $_POST['last_name'];
+      $model->description = $_POST['description'];
+      $model->nationality = $_POST['nationality'];
+      $model->date_birth = $_POST['birth_date'];
+      $model->date_death = $_POST['death_date'];
+     $controller->Add($model);  
+     $controller->GetAll();
      break;
  
      case 'Update':
      $model = json_decode($_POST['obj'], false);
      $controller->Update($model);
+     $controller->GetAll();
      break;
  
      case 'Delete':

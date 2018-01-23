@@ -23874,6 +23874,8 @@ var AuthorsList = function (_React$Component) {
             //tu funkcja z ajaxa
             authors: []
         };
+
+        _this.addAuthor = _this.addAuthor.bind(_this);
         return _this;
     }
 
@@ -23942,7 +23944,9 @@ var AuthorsList = function (_React$Component) {
                         })
                     )
                 ),
-                _react2.default.createElement(_AddAuthorModal2.default, null),
+                _react2.default.createElement(_AddAuthorModal2.default, { addAuthor: function addAuthor(author) {
+                        return _this2.addAuthor(author);
+                    } }),
                 _react2.default.createElement(_AuthorDetailsModal2.default, null)
             );
         }
@@ -23983,28 +23987,30 @@ var AuthorsList = function (_React$Component) {
         }
     }, {
         key: 'addAuthor',
-        value: function addAuthor() {
-            // var obj = {
-            //     'first_name' : $('#addAuthorFirstName').val(),
-            //     'last_name' :  $('#addAuthorLasttName').val(),
-            //     'birth_date':  $('#addAuthorBirthDate').val(),
-            //     'death_date' :  $('#addAuthorDeathDate').val(),
-            //     'nationality' :  $('#addAuthorNationality').val(),
-            //     'biography' :  $('#addAuthorDescription').val(),
-            // };
-
-            // var obj = {
-            //     first_name : 'NOWY',
-            //     last_name :  'NOWY',
-            //     nationality :  'NOWY',
-            //     description :  'NOWY',
-            // };
-            var first_name = "JSDJJ";
-            fetch('http://localhost:8080/switcher/AuthorSwitcher.php?q=Add', {
-                method: 'POST',
-                body: first_name
-            }).catch(function (e) {
-                return alert(e);
+        value: function addAuthor(author) {
+            var self = this;
+            $.ajax({
+                type: "POST",
+                url: "switcher/AuthorSwitcher.php?q=Add",
+                data: {
+                    first_name: author.first_name,
+                    last_name: author.last_name,
+                    description: author.description,
+                    nationality: author.nationality,
+                    birth_date: author.birth_date,
+                    death_date: author.death_date
+                },
+                success: function success(data) {
+                    var authorsData = JSON.parse(data);
+                    $("#addAuthorModal").modal('hide');
+                    alert("Dodano nowy rekord");
+                    self.setState({
+                        authors: authorsData
+                    });
+                },
+                error: function error() {
+                    alert("Wystąpił problem podczas dodawania rekordu");
+                }
             });
         }
     }]);
@@ -24131,6 +24137,8 @@ var _react2 = _interopRequireDefault(_react);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
+function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
 function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
@@ -24140,117 +24148,162 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
 var AddAuthorModal = function (_React$Component) {
     _inherits(AddAuthorModal, _React$Component);
 
-    function AddAuthorModal() {
+    function AddAuthorModal(props) {
         _classCallCheck(this, AddAuthorModal);
 
-        return _possibleConstructorReturn(this, (AddAuthorModal.__proto__ || Object.getPrototypeOf(AddAuthorModal)).apply(this, arguments));
+        var _this = _possibleConstructorReturn(this, (AddAuthorModal.__proto__ || Object.getPrototypeOf(AddAuthorModal)).call(this, props));
+
+        _this.state = {
+            first_name: '',
+            last_name: '',
+            birth_date: '',
+            death_date: '',
+            description: '',
+            nationality: ''
+        };
+        _this.handleInputChange = _this.handleInputChange.bind(_this);
+        _this.handleSubmit = _this.handleSubmit.bind(_this);
+        return _this;
     }
 
     _createClass(AddAuthorModal, [{
-        key: "render",
+        key: 'handleInputChange',
+        value: function handleInputChange(event) {
+
+            var value = event.target.value;
+            var name = event.target.name;
+
+            this.setState(_defineProperty({}, name, value));
+        }
+    }, {
+        key: 'handleSubmit',
+        value: function handleSubmit(e) {
+            var obj = {
+                first_name: this.state.first_name,
+                last_name: this.state.last_name,
+                birth_date: this.state.birth_date,
+                death_date: this.state.death_date,
+                nationality: this.state.nationality,
+                description: this.state.description
+            };
+
+            e.preventDefault();
+            this.props.addAuthor(obj);
+
+            this.setState({
+                first_name: '',
+                last_name: '',
+                birth_date: 'rrrr-MM-mm',
+                death_date: 'rrrr-MM-mm',
+                nationality: '',
+                description: ''
+            });
+        }
+    }, {
+        key: 'render',
         value: function render() {
             return _react2.default.createElement(
-                "div",
-                { className: "modal fade", id: "addAuthorModal" },
+                'div',
+                { className: 'modal fade', id: 'addAuthorModal' },
                 _react2.default.createElement(
-                    "div",
-                    { className: "modal-dialog modal-lg" },
+                    'div',
+                    { className: 'modal-dialog modal-lg' },
                     _react2.default.createElement(
-                        "div",
-                        { className: "modal-content" },
+                        'div',
+                        { className: 'modal-content' },
                         _react2.default.createElement(
-                            "div",
-                            { className: "modal-header" },
+                            'div',
+                            { className: 'modal-header' },
                             _react2.default.createElement(
-                                "h4",
-                                { className: "modal-title" },
-                                "Dodaj autora"
+                                'h4',
+                                { className: 'modal-title' },
+                                'Dodaj autora'
                             ),
                             _react2.default.createElement(
-                                "button",
-                                { type: "button", className: "close btn-danger", "data-dismiss": "modal" },
-                                "\xD7"
+                                'button',
+                                { type: 'button', className: 'close btn-danger', 'data-dismiss': 'modal' },
+                                '\xD7'
                             )
                         ),
                         _react2.default.createElement(
-                            "form",
-                            { id: "addAuthorForm", method: "POST" },
+                            'form',
+                            { onSubmit: this.handleSubmit },
                             _react2.default.createElement(
-                                "div",
-                                { className: "modal-body" },
+                                'div',
+                                { className: 'modal-body' },
                                 _react2.default.createElement(
-                                    "div",
-                                    { className: "form-group" },
+                                    'div',
+                                    { className: 'form-group' },
                                     _react2.default.createElement(
-                                        "label",
+                                        'label',
                                         null,
-                                        "Imi\u0119:"
+                                        'Imi\u0119:'
                                     ),
-                                    _react2.default.createElement("input", { type: "text", className: "form-control", id: "addAuthorFirstName", placeholder: "Imi\u0119", name: "first_name", required: true })
+                                    _react2.default.createElement('input', { type: 'text', className: 'form-control', value: this.state.first_name, onChange: this.handleInputChange, name: 'first_name', required: true })
                                 ),
                                 _react2.default.createElement(
-                                    "div",
-                                    { "class": "form-group" },
+                                    'div',
+                                    { 'class': 'form-group' },
                                     _react2.default.createElement(
-                                        "label",
+                                        'label',
                                         null,
-                                        "Nazwisko:"
+                                        'Nazwisko:'
                                     ),
-                                    _react2.default.createElement("input", { type: "text", className: "form-control", id: "addAuthorLastName", placeholder: "Nazwisko", name: "last_name", required: true })
+                                    _react2.default.createElement('input', { type: 'text', className: 'form-control', value: this.state.last_name, onChange: this.handleInputChange, name: 'last_name', required: true })
                                 ),
                                 _react2.default.createElement(
-                                    "div",
-                                    { "class": "form-group" },
+                                    'div',
+                                    { 'class': 'form-group' },
                                     _react2.default.createElement(
-                                        "label",
+                                        'label',
                                         null,
-                                        "Data urodzenia:"
+                                        'Data urodzenia:'
                                     ),
-                                    _react2.default.createElement("input", { type: "date", className: "form-control", id: "addAuthorDateBirth", placeholder: "Data urodzenia", name: "date_birth", required: true })
+                                    _react2.default.createElement('input', { type: 'date', className: 'form-control', value: this.state.birth_date, onChange: this.handleInputChange, name: 'birth_date', required: true })
                                 ),
                                 _react2.default.createElement(
-                                    "div",
-                                    { "class": "form-group" },
+                                    'div',
+                                    { 'class': 'form-group' },
                                     _react2.default.createElement(
-                                        "label",
+                                        'label',
                                         null,
-                                        "Data \u015Bmierci:"
+                                        'Data \u015Bmierci:'
                                     ),
-                                    _react2.default.createElement("input", { type: "date", className: "form-control", id: "addAuthorDeathBirth", placeholder: "Data \u015Bmierci" })
+                                    _react2.default.createElement('input', { type: 'date', className: 'form-control', value: this.state.death_date, onChange: this.handleInputChange, name: 'death_date' })
                                 ),
                                 _react2.default.createElement(
-                                    "div",
-                                    { "class": "form-group" },
+                                    'div',
+                                    { 'class': 'form-group' },
                                     _react2.default.createElement(
-                                        "label",
+                                        'label',
                                         null,
-                                        "Narodowo\u015B\u0107:"
+                                        'Narodowo\u015B\u0107:'
                                     ),
-                                    _react2.default.createElement("input", { type: "text", className: "form-control", id: "addAuthorNationality", placeholder: "Narodowo\u015B\u0107", name: "nationality", required: true })
+                                    _react2.default.createElement('input', { type: 'text', className: 'form-control', value: this.state.nationality, onChange: this.handleInputChange, name: 'nationality', required: true })
                                 ),
                                 _react2.default.createElement(
-                                    "div",
-                                    { "class": "form-group" },
+                                    'div',
+                                    { 'class': 'form-group' },
                                     _react2.default.createElement(
-                                        "label",
+                                        'label',
                                         null,
-                                        "\u017Byciorys:"
+                                        '\u017Byciorys:'
                                     ),
-                                    _react2.default.createElement("textarea", { type: "text", className: "form-control", id: "addAuthorDescription", placeholder: "\u017Byciorys", name: "description", required: true })
+                                    _react2.default.createElement('textarea', { type: 'text', className: 'form-control', value: this.state.description, onChange: this.handleInputChange, name: 'description', required: true })
                                 )
                             ),
                             _react2.default.createElement(
-                                "div",
-                                { className: "modal-footer" },
+                                'div',
+                                { className: 'modal-footer' },
                                 _react2.default.createElement(
-                                    "button",
-                                    { type: "button", className: "btn btn-outline-danger", "data-dismiss": "modal" },
-                                    "Anuluj"
+                                    'button',
+                                    { type: 'button', className: 'btn btn-outline-danger', 'data-dismiss': 'modal' },
+                                    'Anuluj'
                                 ),
                                 _react2.default.createElement(
-                                    "button",
-                                    { type: "submit", className: "btn btn-outline-success", "data-dismiss": "modal" },
-                                    "Dodaj"
+                                    'button',
+                                    { type: 'submit', className: 'btn btn-outline-success' },
+                                    'Dodaj'
                                 )
                             )
                         )

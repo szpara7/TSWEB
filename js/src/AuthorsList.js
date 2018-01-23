@@ -16,6 +16,8 @@ class AuthorsList extends React.Component {
             //tu funkcja z ajaxa
             authors: []
         }
+
+        this.addAuthor = this.addAuthor.bind(this);
     }
 
     componentDidMount() {
@@ -44,7 +46,7 @@ class AuthorsList extends React.Component {
                         }
                     </tbody>
                 </table>
-                <AddAuthorModal/>    
+                <AddAuthorModal addAuthor={(author) => this.addAuthor(author)}/>    
                 <AuthorDetailsModal/>          
             </div>
         )
@@ -67,6 +69,7 @@ class AuthorsList extends React.Component {
           .then(json => {
             this.setState({ authors: json});
           });
+          
     }
 
     Details(author) {
@@ -81,32 +84,34 @@ class AuthorsList extends React.Component {
 
     }
 
-    addAuthor()
+    addAuthor(author)
     {
-        // var obj = {
-        //     'first_name' : $('#addAuthorFirstName').val(),
-        //     'last_name' :  $('#addAuthorLasttName').val(),
-        //     'birth_date':  $('#addAuthorBirthDate').val(),
-        //     'death_date' :  $('#addAuthorDeathDate').val(),
-        //     'nationality' :  $('#addAuthorNationality').val(),
-        //     'biography' :  $('#addAuthorDescription').val(),
-        // };
+      var self = this;
+        $.ajax({
+            type: "POST",
+            url : "switcher/AuthorSwitcher.php?q=Add",
+            data: {
+                first_name : author.first_name,
+                last_name : author.last_name,
+                description : author.description,
+                nationality : author.nationality,
+                birth_date : author.birth_date,
+                death_date : author.death_date
+            },
+            success: function(data) {    
+                var authorsData = JSON.parse(data);
+                $("#addAuthorModal").modal('hide');
+                alert("Dodano nowy rekord");  
+                self.setState({
+                    authors: authorsData
+                });
+            },
+            error: function() {
+                alert("Wystąpił problem podczas dodawania rekordu");
+            }
+        });
 
-        // var obj = {
-        //     first_name : 'NOWY',
-        //     last_name :  'NOWY',
-        //     nationality :  'NOWY',
-        //     description :  'NOWY',
-        // };
-        var first_name = "JSDJJ";
-        fetch('http://localhost:8080/switcher/AuthorSwitcher.php?q=Add',
-         {
-            method : 'POST',
-            body: first_name
-         })
-        .catch((e)=> alert(e)); 
-           
-
+ 
     }
 }
 
