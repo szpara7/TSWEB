@@ -24,8 +24,10 @@ require_once('../controller/GenreController.php');
      break;
  
      case 'Update':
-     $model = json_decode($_POST['obj'], false);
+     $model->id = $_POST['id'];
+     $model->name = $_POST['name'];
      $controller->Update($model);
+     $controller->GetAll();
      break;
  
      case 'Delete':

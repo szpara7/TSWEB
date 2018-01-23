@@ -973,10 +973,13 @@ var UpdateButton = function (_React$Component) {
     _createClass(UpdateButton, [{
         key: "render",
         value: function render() {
+            var _this2 = this;
+
             return _react2.default.createElement(
                 "a",
-                { className: "btn btn-dark btn-sm border border-primary" },
-                _react2.default.createElement("span", { className: "glyphicon" }),
+                { className: "btn btn-dark btn-sm border border-primary", onClick: function onClick() {
+                        return _this2.props.onClick();
+                    } },
                 "Edytuj"
             );
         }
@@ -23882,7 +23885,7 @@ var AuthorsList = function (_React$Component) {
     _createClass(AuthorsList, [{
         key: 'componentDidMount',
         value: function componentDidMount() {
-            this.Update();
+            this.GetAll();
         }
     }, {
         key: 'render',
@@ -23963,8 +23966,8 @@ var AuthorsList = function (_React$Component) {
             alert('Usunięto rekord');
         }
     }, {
-        key: 'Update',
-        value: function Update() {
+        key: 'GetAll',
+        value: function GetAll() {
             var _this4 = this;
 
             fetch('http://localhost:8080/switcher/AuthorSwitcher.php?q=GetAll').then(function (response) {
@@ -24775,6 +24778,10 @@ var _AddGenreModal = __webpack_require__(90);
 
 var _AddGenreModal2 = _interopRequireDefault(_AddGenreModal);
 
+var _UpdateGenreModal = __webpack_require__(91);
+
+var _UpdateGenreModal2 = _interopRequireDefault(_UpdateGenreModal);
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -24797,17 +24804,18 @@ var AuthorsList = function (_React$Component) {
         };
 
         _this.AddGenre = _this.AddGenre.bind(_this);
+        _this.UpdateGenre = _this.UpdateGenre.bind(_this);
         return _this;
     }
 
     _createClass(AuthorsList, [{
         key: 'componentDidMount',
         value: function componentDidMount() {
-            this.Update();
+            this.GetAll();
         }
     }, {
-        key: 'Update',
-        value: function Update() {
+        key: 'GetAll',
+        value: function GetAll() {
             var _this2 = this;
 
             fetch('http://localhost:8080/switcher/GenreSwitcher.php?q=GetAll').then(function (response) {
@@ -24842,7 +24850,7 @@ var AuthorsList = function (_React$Component) {
                 success: function success(data) {
                     var genresData = JSON.parse(data);
                     $("#addGenreModal").modal('hide');
-                    alert("Dodano nowy rekord");
+                    alert("Dodano rekord");
                     self.setState({
                         genres: genresData
                     });
@@ -24851,6 +24859,32 @@ var AuthorsList = function (_React$Component) {
                     alert('Wystąpił błąd podczas dodawania rekordu!');
                 }
             });
+        }
+    }, {
+        key: 'UpdateGenre',
+        value: function UpdateGenre(genre) {
+            var self = this;
+            $.ajax({
+                type: "POST",
+                url: "switcher/GenreSwitcher.php?q=Update",
+                data: {
+                    id: genre.id,
+                    name: genre.name
+                },
+                success: function success(data) {
+                    var genresData = JSON.parse(data);
+                    $("#updateGenreModal").modal('hide');
+                    alert("Edytowano rekord");
+                    self.setState({
+                        genres: genresData
+                    });
+                },
+                error: function error() {
+                    alert('Wystąpił błąd podczas edytowania rekordu!');
+                }
+            });
+
+            $("#updateGenreModal").modal('hide');
         }
     }, {
         key: 'render',
@@ -24912,6 +24946,9 @@ var AuthorsList = function (_React$Component) {
                 ),
                 _react2.default.createElement(_AddGenreModal2.default, { addGenre: function addGenre(item) {
                         return _this4.AddGenre(item);
+                    } }),
+                _react2.default.createElement(_UpdateGenreModal2.default, { handleSubmit: function handleSubmit(i) {
+                        return _this4.UpdateGenre(i);
                     } })
             );
         }
@@ -24965,13 +25002,23 @@ var GenreListItem = function (_React$Component) {
     function GenreListItem(props) {
         _classCallCheck(this, GenreListItem);
 
-        return _possibleConstructorReturn(this, (GenreListItem.__proto__ || Object.getPrototypeOf(GenreListItem)).call(this, props));
+        var _this = _possibleConstructorReturn(this, (GenreListItem.__proto__ || Object.getPrototypeOf(GenreListItem)).call(this, props));
+
+        _this.UpdateGenre = _this.UpdateGenre.bind(_this);
+        return _this;
     }
 
     _createClass(GenreListItem, [{
         key: 'deleteGenre',
         value: function deleteGenre() {
             this.props.deleteGenre(this.props.genre.id);
+        }
+    }, {
+        key: 'UpdateGenre',
+        value: function UpdateGenre() {
+            $('#updateGenreModal').modal('show');
+            $('#nameUpdateGenreModal').val(this.props.genre.name);
+            $('#idUpdateGenreModal').val(this.props.genre.id);
         }
     }, {
         key: 'render',
@@ -24994,7 +25041,7 @@ var GenreListItem = function (_React$Component) {
                 _react2.default.createElement(
                     'td',
                     null,
-                    _react2.default.createElement(_UpdateButton2.default, null),
+                    _react2.default.createElement(_UpdateButton2.default, { onClick: this.UpdateGenre }),
                     _react2.default.createElement(_DeleteButton2.default, { onClick: function onClick() {
                             return _this2.deleteGenre();
                         } })
@@ -25142,6 +25189,141 @@ var AddGenreModal = function (_React$Component) {
 }(_react2.default.Component);
 
 exports.default = AddGenreModal;
+
+/***/ }),
+/* 91 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+var _react = __webpack_require__(0);
+
+var _react2 = _interopRequireDefault(_react);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+var UpdateGenreModal = function (_React$Component) {
+    _inherits(UpdateGenreModal, _React$Component);
+
+    function UpdateGenreModal(props) {
+        _classCallCheck(this, UpdateGenreModal);
+
+        var _this = _possibleConstructorReturn(this, (UpdateGenreModal.__proto__ || Object.getPrototypeOf(UpdateGenreModal)).call(this, props));
+
+        _this.state = {
+            name: '',
+            id: ''
+        };
+        _this.handleInputChange = _this.handleInputChange.bind(_this);
+        _this.handleSubmit = _this.handleSubmit.bind(_this);
+        return _this;
+    }
+
+    _createClass(UpdateGenreModal, [{
+        key: 'handleInputChange',
+        value: function handleInputChange(event) {
+
+            var value = event.target.value;
+            var name = event.target.name;
+
+            this.setState(_defineProperty({}, name, value));
+        }
+    }, {
+        key: 'handleSubmit',
+        value: function handleSubmit(e) {
+
+            var obj = {
+                name: $("#nameUpdateGenreModal").val(),
+                id: $("#idUpdateGenreModal").val()
+            };
+
+            e.preventDefault();
+            this.props.handleSubmit(obj);
+        }
+    }, {
+        key: 'render',
+        value: function render() {
+            return _react2.default.createElement(
+                'div',
+                { className: 'modal fade', id: 'updateGenreModal' },
+                _react2.default.createElement(
+                    'div',
+                    { className: 'modal-dialog modal-sm' },
+                    _react2.default.createElement(
+                        'div',
+                        { className: 'modal-content' },
+                        _react2.default.createElement(
+                            'div',
+                            { className: 'modal-header' },
+                            _react2.default.createElement(
+                                'h4',
+                                { className: 'modal-title' },
+                                'Edytuj gatunek'
+                            ),
+                            _react2.default.createElement(
+                                'button',
+                                { type: 'button', className: 'close btn-danger', 'data-dismiss': 'modal' },
+                                '\xD7'
+                            )
+                        ),
+                        _react2.default.createElement(
+                            'form',
+                            { onSubmit: this.handleSubmit },
+                            _react2.default.createElement(
+                                'div',
+                                { className: 'modal-body' },
+                                _react2.default.createElement(
+                                    'div',
+                                    { className: 'form-group' },
+                                    _react2.default.createElement(
+                                        'label',
+                                        null,
+                                        'Nazwa gatunku:'
+                                    ),
+                                    _react2.default.createElement('input', { id: 'nameUpdateGenreModal', type: 'text', className: 'form-control', onChange: this.handleInputChange, name: 'name', required: true })
+                                )
+                            ),
+                            _react2.default.createElement('input', { type: 'hidden', name: 'id', id: 'idUpdateGenreModal', required: true }),
+                            _react2.default.createElement(
+                                'div',
+                                { className: 'modal-footer' },
+                                _react2.default.createElement(
+                                    'button',
+                                    { type: 'button', className: 'btn btn-outline-danger', 'data-dismiss': 'modal' },
+                                    'Anuluj'
+                                ),
+                                _react2.default.createElement(
+                                    'button',
+                                    { type: 'submit', className: 'btn btn-outline-success' },
+                                    'Edytuj'
+                                )
+                            )
+                        )
+                    )
+                )
+            );
+        }
+    }]);
+
+    return UpdateGenreModal;
+}(_react2.default.Component);
+
+exports.default = UpdateGenreModal;
 
 /***/ })
 /******/ ]);

@@ -6,11 +6,19 @@ import DetailsButton from './DetailsButton.js';
 class GenreListItem extends React.Component {
     constructor(props) {
         super(props);
+
+        this.UpdateGenre = this.UpdateGenre.bind(this);
     }
 
-    deleteGenre()
-    {       
+    deleteGenre() {       
        this.props.deleteGenre(this.props.genre.id);
+    }
+
+    UpdateGenre() {
+        $('#updateGenreModal').modal('show');
+        $('#nameUpdateGenreModal').val(this.props.genre.name);
+        $('#idUpdateGenreModal').val(this.props.genre.id);       
+  
     }
 
 
@@ -20,7 +28,7 @@ class GenreListItem extends React.Component {
                 <td>{this.props.genre.name}</td>
                 <td>{this.props.genre.count}</td>
                 <td>                
-                    <UpdateButton/><DeleteButton onClick={() => this.deleteGenre()}/>
+                    <UpdateButton onClick = {this.UpdateGenre}/><DeleteButton onClick={() => this.deleteGenre()}/>
                 </td>
             </tr>          
         )                

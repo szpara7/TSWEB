@@ -1,11 +1,12 @@
 import React from 'react';
 
 
-class AddGenreModal extends React.Component {
+class UpdateGenreModal extends React.Component {
     constructor(props) {
         super(props);
         this.state= {
           name : '',
+          id : ''
         };
         this.handleInputChange = this.handleInputChange.bind(this);
         this.handleSubmit = this.handleSubmit.bind(this);
@@ -22,27 +23,27 @@ class AddGenreModal extends React.Component {
     }
 
     handleSubmit(e) {
+     
         var obj = {
-            name : this.state.name,
+            name : $("#nameUpdateGenreModal").val(),
+            id : $("#idUpdateGenreModal").val(),
         };       
+        
 
         e.preventDefault();
-        this.props.addGenre(obj);
+        this.props.handleSubmit(obj);
 
-        this.setState({
-            name : ''       
-        });
     }
 
     render() {
         return(
-            <div className="modal fade" id="addGenreModal">
+            <div className="modal fade" id="updateGenreModal">
                 <div className="modal-dialog modal-sm">
                     <div className="modal-content">
                     
                     
                         <div className="modal-header">
-                        <h4 className="modal-title">Dodaj gatunek</h4>
+                        <h4 className="modal-title">Edytuj gatunek</h4>
                         <button type="button" className="close btn-danger" data-dismiss="modal">&times;</button>
                         </div>
                         
@@ -50,13 +51,14 @@ class AddGenreModal extends React.Component {
                             <div className="modal-body">
                                 <div className="form-group">
                                     <label>Nazwa gatunku:</label>
-                                    <input type="text" className="form-control" value={this.state.name} onChange={this.handleInputChange} name="name" required/>
+                                    <input id="nameUpdateGenreModal" type="text" className="form-control" onChange={this.handleInputChange} name="name" required/>
                                 </div>                              
-                            </div>     
+                            </div>           
+                            <input type="hidden" name = "id" id="idUpdateGenreModal" required />                 
                         
                             <div className="modal-footer">
                             <button type="button" className="btn btn-outline-danger" data-dismiss="modal">Anuluj</button>
-                            <button type="submit" className="btn btn-outline-success">Dodaj</button>
+                            <button type="submit" className="btn btn-outline-success">Edytuj</button>
                             </div>
                         </form>
                     </div>
@@ -66,4 +68,4 @@ class AddGenreModal extends React.Component {
     }
 }
 
-export default AddGenreModal;
+export default UpdateGenreModal;

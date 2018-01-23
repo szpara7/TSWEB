@@ -21,7 +21,7 @@ class AuthorsList extends React.Component {
     }
 
     componentDidMount() {
-       this.Update();
+       this.GetAll();
         }
 
     render() {
@@ -62,7 +62,7 @@ class AuthorsList extends React.Component {
        alert('Usunięto rekord');
     }
 
-    Update()
+    GetAll()
     {
         fetch('http://localhost:8080/switcher/AuthorSwitcher.php?q=GetAll')
           .then(response => response.json())
@@ -83,6 +83,8 @@ class AuthorsList extends React.Component {
         $('#authorDetailsModal').modal('show');
 
     }
+
+    
 
     addAuthor(author)
     {

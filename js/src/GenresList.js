@@ -2,6 +2,7 @@ import React from 'react';
 import GenreListItem from './GenreListItem.js';
 import CreateButton from './CreateButton.js';
 import AddGenreModal from './AddGenreModal.js';
+import UpdateGenreModal from './UpdateGenreModal.js';
 
 
 
@@ -16,13 +17,14 @@ class AuthorsList extends React.Component {
         }
 
         this.AddGenre = this.AddGenre.bind(this);
+        this.UpdateGenre = this.UpdateGenre.bind(this);
     }
 
     componentDidMount() {
-         this.Update();
+         this.GetAll();
     }
 
-    Update() {
+    GetAll() {
         fetch('http://localhost:8080/switcher/GenreSwitcher.php?q=GetAll')
         .then(response => response.json())
         .then(json => {
@@ -51,7 +53,7 @@ class AuthorsList extends React.Component {
             success : function(data) {
                 var genresData = JSON.parse(data);
                 $("#addGenreModal").modal('hide');
-                alert("Dodano nowy rekord");  
+                alert("Dodano rekord");  
                 self.setState({
                     genres: genresData
                 });
@@ -61,6 +63,31 @@ class AuthorsList extends React.Component {
             }
         });
     }
+
+     UpdateGenre(genre) {
+        var self = this;        
+        $.ajax({
+            type : "POST",
+            url : "switcher/GenreSwitcher.php?q=Update",
+            data : {
+                id : genre.id,
+                name : genre.name
+            },
+            success : function(data) {
+                var genresData = JSON.parse(data);
+                $("#updateGenreModal").modal('hide');
+                alert("Edytowano rekord");  
+                self.setState({
+                    genres: genresData
+                });
+            },
+            error : function() {
+                alert('Wystąpił błąd podczas edytowania rekordu!');
+            }
+        });
+
+         $("#updateGenreModal").modal('hide');
+     }
 
     render() {
         return(
@@ -85,6 +112,7 @@ class AuthorsList extends React.Component {
                     </tbody>
                 </table>
                 <AddGenreModal addGenre={(item) => this.AddGenre(item)} />
+                <UpdateGenreModal handleSubmit={(i) => this.UpdateGenre(i)}/>
             </div>
         )
     }
