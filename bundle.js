@@ -24292,7 +24292,7 @@ var AddAuthorModal = function (_React$Component) {
                                 ),
                                 _react2.default.createElement(
                                     'div',
-                                    { 'class': 'form-group' },
+                                    { className: 'form-group' },
                                     _react2.default.createElement(
                                         'label',
                                         null,
@@ -24302,7 +24302,7 @@ var AddAuthorModal = function (_React$Component) {
                                 ),
                                 _react2.default.createElement(
                                     'div',
-                                    { 'class': 'form-group' },
+                                    { className: 'form-group' },
                                     _react2.default.createElement(
                                         'label',
                                         null,
@@ -24312,7 +24312,7 @@ var AddAuthorModal = function (_React$Component) {
                                 ),
                                 _react2.default.createElement(
                                     'div',
-                                    { 'class': 'form-group' },
+                                    { className: 'form-group' },
                                     _react2.default.createElement(
                                         'label',
                                         null,
@@ -24322,7 +24322,7 @@ var AddAuthorModal = function (_React$Component) {
                                 ),
                                 _react2.default.createElement(
                                     'div',
-                                    { 'class': 'form-group' },
+                                    { className: 'form-group' },
                                     _react2.default.createElement(
                                         'label',
                                         null,
@@ -24332,7 +24332,7 @@ var AddAuthorModal = function (_React$Component) {
                                 ),
                                 _react2.default.createElement(
                                     'div',
-                                    { 'class': 'form-group' },
+                                    { className: 'form-group' },
                                     _react2.default.createElement(
                                         'label',
                                         null,
@@ -24486,7 +24486,7 @@ var UpdateGenreModal = function (_React$Component) {
                                 ),
                                 _react2.default.createElement(
                                     'div',
-                                    { 'class': 'form-group' },
+                                    { className: 'form-group' },
                                     _react2.default.createElement(
                                         'label',
                                         null,
@@ -24496,7 +24496,7 @@ var UpdateGenreModal = function (_React$Component) {
                                 ),
                                 _react2.default.createElement(
                                     'div',
-                                    { 'class': 'form-group' },
+                                    { className: 'form-group' },
                                     _react2.default.createElement(
                                         'label',
                                         null,
@@ -24506,7 +24506,7 @@ var UpdateGenreModal = function (_React$Component) {
                                 ),
                                 _react2.default.createElement(
                                     'div',
-                                    { 'class': 'form-group' },
+                                    { className: 'form-group' },
                                     _react2.default.createElement(
                                         'label',
                                         null,
@@ -24516,7 +24516,7 @@ var UpdateGenreModal = function (_React$Component) {
                                 ),
                                 _react2.default.createElement(
                                     'div',
-                                    { 'class': 'form-group' },
+                                    { className: 'form-group' },
                                     _react2.default.createElement(
                                         'label',
                                         null,
@@ -24526,7 +24526,7 @@ var UpdateGenreModal = function (_React$Component) {
                                 ),
                                 _react2.default.createElement(
                                     'div',
-                                    { 'class': 'form-group' },
+                                    { className: 'form-group' },
                                     _react2.default.createElement(
                                         'label',
                                         null,

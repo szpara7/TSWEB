@@ -67,23 +67,23 @@ class AddAuthorModal extends React.Component {
                                     <label>Imię:</label>
                                     <input type="text" className="form-control" value={this.state.first_name} onChange={this.handleInputChange} name="first_name" required/>
                                 </div>
-                                <div class="form-group">
+                                <div className="form-group">
                                     <label>Nazwisko:</label>
                                     <input type="text" className="form-control" value={this.state.last_name} onChange={this.handleInputChange} name="last_name" required/>
                                 </div>
-                                <div class="form-group">
+                                <div className="form-group">
                                     <label>Data urodzenia:</label>
                                     <input type="date" className="form-control" value={this.state.birth_date} onChange={this.handleInputChange} name="birth_date" required/>
                                 </div>
-                                <div class="form-group">
+                                <div className="form-group">
                                     <label>Data śmierci:</label>
                                     <input type="date" className="form-control" value={this.state.death_date} onChange={this.handleInputChange} name="death_date" />
                                 </div>
-                                <div class="form-group">
+                                <div className="form-group">
                                     <label>Narodowość:</label>
                                     <input type="text" className="form-control" value={this.state.nationality} onChange={this.handleInputChange} name="nationality" required/>
                                 </div>
-                                <div class="form-group">
+                                <div className="form-group">
                                     <label>Życiorys:</label>
                                     <textarea type="text" className="form-control" value={this.state.description} onChange={this.handleInputChange} name="description" required/>
                                 </div>

@@ -62,23 +62,23 @@ class UpdateGenreModal extends React.Component {
                                     <label>Imię:</label>
                                     <input type="text" className="form-control" id="first_nameAuthorUpdate" onChange={this.handleInputChange} name="first_name" required/>
                                 </div>
-                                <div class="form-group">
+                                <div className="form-group">
                                     <label>Nazwisko:</label>
                                     <input type="text" className="form-control" id="last_nameAuthorUpdate"  onChange={this.handleInputChange} name="last_name" required/>
                                 </div>
-                                <div class="form-group">
+                                <div className="form-group">
                                     <label>Data urodzenia:</label>
                                     <input type="date" className="form-control" id="birth_dateAuthorUpdate"  onChange={this.handleInputChange} name="birth_date" required/>
                                 </div>
-                                <div class="form-group">
+                                <div className="form-group">
                                     <label>Data śmierci:</label>
                                     <input type="date" className="form-control" id="death_dateAuthorUpdate"  onChange={this.handleInputChange} name="death_date" />
                                 </div>
-                                <div class="form-group">
+                                <div className="form-group">
                                     <label>Narodowość:</label>
                                     <input type="text" className="form-control" id="nationalityAuthorUpdate" onChange={this.handleInputChange} name="nationality" required/>
                                 </div>
-                                <div class="form-group">
+                                <div className="form-group">
                                     <label>Życiorys:</label>
                                     <textarea type="text" className="form-control" id="descriptionAuthorUpdate" onChange={this.handleInputChange} name="description" required/>
                                 </div>
