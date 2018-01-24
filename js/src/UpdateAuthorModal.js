@@ -1,7 +1,7 @@
 import React from 'react';
 
 
-class AddAuthorModal extends React.Component {
+class UpdateGenreModal extends React.Component {
     constructor(props) {
         super(props);
         this.state= {
@@ -10,7 +10,8 @@ class AddAuthorModal extends React.Component {
             birth_date: '',
             death_date: '',
             description: '',
-            nationality: ''
+            nationality: '',
+            id : ''
         };
         this.handleInputChange = this.handleInputChange.bind(this);
         this.handleSubmit = this.handleSubmit.bind(this);
@@ -27,37 +28,31 @@ class AddAuthorModal extends React.Component {
     }
 
     handleSubmit(e) {
+     
         var obj = {
-            first_name : this.state.first_name,
-            last_name : this.state.last_name,
-            birth_date: this.state.birth_date,
-            death_date: this.state.death_date,
-            nationality: this.state.nationality,
-            description : this.state.description
-        };      
+            first_name : $("#first_nameAuthorUpdate").val(),
+            last_name : $("#last_nameAuthorUpdate").val(),
+            birth_date : $("#birth_dateAuthorUpdate").val(),
+            death_date : $("#death_dateAuthorUpdate").val(),
+            nationality : $("#nationalityAuthorUpdate").val(),
+            description : $("#descriptionAuthorUpdate").val(),
+            id : $("#idAuthorUpdate").val(),
+        };       
 
         e.preventDefault();
-        this.props.addAuthor(obj);
+        this.props.handleSubmit(obj);
 
-        this.setState({
-            first_name : '',
-            last_name: '',
-            birth_date: 'rrrr-MM-mm',
-            death_date : 'rrrr-MM-mm',
-            nationality: '',
-            description: ''
-        });
     }
 
     render() {
         return(
-            <div className="modal fade" id="addAuthorModal">
+            <div className="modal fade" id="updateAuthorModal">
                 <div className="modal-dialog modal-lg">
                     <div className="modal-content">
                     
                     
                         <div className="modal-header">
-                        <h4 className="modal-title">Dodaj autora</h4>
+                        <h4 className="modal-title">Edytuj autora</h4>
                         <button type="button" className="close btn-danger" data-dismiss="modal">&times;</button>
                         </div>
                         
@@ -65,34 +60,35 @@ class AddAuthorModal extends React.Component {
                             <div className="modal-body">
                                 <div className="form-group">
                                     <label>Imię:</label>
-                                    <input type="text" className="form-control" value={this.state.first_name} onChange={this.handleInputChange} name="first_name" required/>
+                                    <input type="text" className="form-control" id="first_nameAuthorUpdate" onChange={this.handleInputChange} name="first_name" required/>
                                 </div>
                                 <div class="form-group">
                                     <label>Nazwisko:</label>
-                                    <input type="text" className="form-control" value={this.state.last_name} onChange={this.handleInputChange} name="last_name" required/>
+                                    <input type="text" className="form-control" id="last_nameAuthorUpdate"  onChange={this.handleInputChange} name="last_name" required/>
                                 </div>
                                 <div class="form-group">
                                     <label>Data urodzenia:</label>
-                                    <input type="date" className="form-control" value={this.state.birth_date} onChange={this.handleInputChange} name="birth_date" required/>
+                                    <input type="date" className="form-control" id="birth_dateAuthorUpdate"  onChange={this.handleInputChange} name="birth_date" required/>
                                 </div>
                                 <div class="form-group">
                                     <label>Data śmierci:</label>
-                                    <input type="date" className="form-control" value={this.state.death_date} onChange={this.handleInputChange} name="death_date" />
+                                    <input type="date" className="form-control" id="death_dateAuthorUpdate"  onChange={this.handleInputChange} name="death_date" />
                                 </div>
                                 <div class="form-group">
                                     <label>Narodowość:</label>
-                                    <input type="text" className="form-control" value={this.state.nationality} onChange={this.handleInputChange} name="nationality" required/>
+                                    <input type="text" className="form-control" id="nationalityAuthorUpdate" onChange={this.handleInputChange} name="nationality" required/>
                                 </div>
                                 <div class="form-group">
                                     <label>Życiorys:</label>
-                                    <textarea type="text" className="form-control" value={this.state.description} onChange={this.handleInputChange} name="description" required/>
+                                    <textarea type="text" className="form-control" id="descriptionAuthorUpdate" onChange={this.handleInputChange} name="description" required/>
                                 </div>
+                                <input type="hidden" name="id" id="idAuthorUpdate" required />
                             </div>
                             
                         
                             <div className="modal-footer">
                             <button type="button" className="btn btn-outline-danger" data-dismiss="modal">Anuluj</button>
-                            <button type="submit" className="btn btn-outline-success">Dodaj</button>
+                            <button type="submit" className="btn btn-outline-success">Edytuj</button>
                             </div>
                         </form>
                     </div>
@@ -102,4 +98,4 @@ class AddAuthorModal extends React.Component {
     }
 }
 
-export default AddAuthorModal;
+export default UpdateGenreModal;

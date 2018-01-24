@@ -3,6 +3,7 @@ import AuthorListItem from './AuthorListItem.js';
 import CreateButton from './CreateButton.js';
 import AddAuthorModal from './AddAuthorModal.js';
 import AuthorDetailsModal from './AuthorDetailsModal.js';
+import UpdateAuthorModal from './UpdateAuthorModal.js';
 
 
 
@@ -18,6 +19,7 @@ class AuthorsList extends React.Component {
         }
 
         this.addAuthor = this.addAuthor.bind(this);
+        this.UpdateAuthor = this.UpdateAuthor.bind(this);
     }
 
     componentDidMount() {
@@ -47,7 +49,8 @@ class AuthorsList extends React.Component {
                     </tbody>
                 </table>
                 <AddAuthorModal addAuthor={(author) => this.addAuthor(author)}/>    
-                <AuthorDetailsModal/>          
+                <AuthorDetailsModal/>   
+                <UpdateAuthorModal handleSubmit={(i) => this.UpdateAuthor(i)}/>       
             </div>
         )
     }
@@ -73,7 +76,6 @@ class AuthorsList extends React.Component {
     }
 
     Details(author) {
-
         $("#detailTitle").text(author.first_name+ ' ' + author.last_name);
         $("#detailDescritpion").text(author.description);
         $("#detailBirthDate").text(author.date_birth);
@@ -111,9 +113,35 @@ class AuthorsList extends React.Component {
             error: function() {
                 alert("Wystąpił problem podczas dodawania rekordu");
             }
-        });
+        }); 
+    }
 
- 
+    UpdateAuthor(author) {
+        var self = this;
+        $.ajax({
+            type: "POST",
+            url : "switcher/AuthorSwitcher.php?q=Update",
+            data: {
+                first_name : author.first_name,
+                last_name : author.last_name,
+                description : author.description,
+                nationality : author.nationality,
+                birth_date : author.birth_date,
+                death_date : author.death_date,
+                id : author.id
+            },
+            success: function(data) {    
+                var authorsData = JSON.parse(data);
+                $("#updateAuthorModal").modal('hide');
+                alert("Edytowano rekord");  
+                self.setState({
+                    authors: authorsData
+                });
+            },
+            error: function() {
+                alert("Wystąpił problem podczas edytowania rekordu");
+            }
+        }); 
     }
 }
 

@@ -2813,11 +2813,11 @@ var _AuthorsList = __webpack_require__(82);
 
 var _AuthorsList2 = _interopRequireDefault(_AuthorsList);
 
-var _BooksList = __webpack_require__(85);
+var _BooksList = __webpack_require__(86);
 
 var _BooksList2 = _interopRequireDefault(_BooksList);
 
-var _GenresList = __webpack_require__(88);
+var _GenresList = __webpack_require__(89);
 
 var _GenresList2 = _interopRequireDefault(_GenresList);
 
@@ -23857,6 +23857,10 @@ var _AuthorDetailsModal = __webpack_require__(40);
 
 var _AuthorDetailsModal2 = _interopRequireDefault(_AuthorDetailsModal);
 
+var _UpdateAuthorModal = __webpack_require__(85);
+
+var _UpdateAuthorModal2 = _interopRequireDefault(_UpdateAuthorModal);
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -23879,6 +23883,7 @@ var AuthorsList = function (_React$Component) {
         };
 
         _this.addAuthor = _this.addAuthor.bind(_this);
+        _this.UpdateAuthor = _this.UpdateAuthor.bind(_this);
         return _this;
     }
 
@@ -23950,7 +23955,10 @@ var AuthorsList = function (_React$Component) {
                 _react2.default.createElement(_AddAuthorModal2.default, { addAuthor: function addAuthor(author) {
                         return _this2.addAuthor(author);
                     } }),
-                _react2.default.createElement(_AuthorDetailsModal2.default, null)
+                _react2.default.createElement(_AuthorDetailsModal2.default, null),
+                _react2.default.createElement(_UpdateAuthorModal2.default, { handleSubmit: function handleSubmit(i) {
+                        return _this2.UpdateAuthor(i);
+                    } })
             );
         }
     }, {
@@ -23979,7 +23987,6 @@ var AuthorsList = function (_React$Component) {
     }, {
         key: 'Details',
         value: function Details(author) {
-
             $("#detailTitle").text(author.first_name + ' ' + author.last_name);
             $("#detailDescritpion").text(author.description);
             $("#detailBirthDate").text(author.date_birth);
@@ -24013,6 +24020,35 @@ var AuthorsList = function (_React$Component) {
                 },
                 error: function error() {
                     alert("Wystąpił problem podczas dodawania rekordu");
+                }
+            });
+        }
+    }, {
+        key: 'UpdateAuthor',
+        value: function UpdateAuthor(author) {
+            var self = this;
+            $.ajax({
+                type: "POST",
+                url: "switcher/AuthorSwitcher.php?q=Update",
+                data: {
+                    first_name: author.first_name,
+                    last_name: author.last_name,
+                    description: author.description,
+                    nationality: author.nationality,
+                    birth_date: author.birth_date,
+                    death_date: author.death_date,
+                    id: author.id
+                },
+                success: function success(data) {
+                    var authorsData = JSON.parse(data);
+                    $("#updateAuthorModal").modal('hide');
+                    alert("Edytowano rekord");
+                    self.setState({
+                        authors: authorsData
+                    });
+                },
+                error: function error() {
+                    alert("Wystąpił problem podczas edytowania rekordu");
                 }
             });
         }
@@ -24070,7 +24106,10 @@ var AuthorListItem = function (_React$Component) {
     function AuthorListItem(props) {
         _classCallCheck(this, AuthorListItem);
 
-        return _possibleConstructorReturn(this, (AuthorListItem.__proto__ || Object.getPrototypeOf(AuthorListItem)).call(this, props));
+        var _this = _possibleConstructorReturn(this, (AuthorListItem.__proto__ || Object.getPrototypeOf(AuthorListItem)).call(this, props));
+
+        _this.UpdateAuthor = _this.UpdateAuthor.bind(_this);
+        return _this;
     }
 
     _createClass(AuthorListItem, [{
@@ -24082,6 +24121,13 @@ var AuthorListItem = function (_React$Component) {
         key: 'handleDetailsClick',
         value: function handleDetailsClick() {
             this.props.handleDetailsClick(this.props.author);
+        }
+    }, {
+        key: 'UpdateAuthor',
+        value: function UpdateAuthor() {
+
+            $("#updateAuthorModal").modal('show');
+            $("#first_nameAuthorUpdate").val(this.props.author.first_name), $("#last_nameAuthorUpdate").val(this.props.author.last_name), $("#first_nameAuthorUpdate").val(this.props.author.first_name), $("#birth_dateAuthorUpdate").val(this.props.author.date_birth), $("#death_dateAuthorUpdate").val(this.props.author.date_death), $("#nationalityAuthorUpdate").val(this.props.author.nationality), $("#descriptionAuthorUpdate").val(this.props.author.description), $("#idAuthorUpdate").val(this.props.author.id);
         }
     }, {
         key: 'render',
@@ -24104,7 +24150,7 @@ var AuthorListItem = function (_React$Component) {
                 _react2.default.createElement(
                     'td',
                     null,
-                    _react2.default.createElement(_UpdateButton2.default, null),
+                    _react2.default.createElement(_UpdateButton2.default, { onClick: this.UpdateAuthor }),
                     _react2.default.createElement(_DeleteButton2.default, { onClick: function onClick() {
                             return _this2.deleteAuthor();
                         } }),
@@ -24338,7 +24384,202 @@ var _react = __webpack_require__(0);
 
 var _react2 = _interopRequireDefault(_react);
 
-var _BookListItem = __webpack_require__(86);
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+var UpdateGenreModal = function (_React$Component) {
+    _inherits(UpdateGenreModal, _React$Component);
+
+    function UpdateGenreModal(props) {
+        _classCallCheck(this, UpdateGenreModal);
+
+        var _this = _possibleConstructorReturn(this, (UpdateGenreModal.__proto__ || Object.getPrototypeOf(UpdateGenreModal)).call(this, props));
+
+        _this.state = {
+            first_name: '',
+            last_name: '',
+            birth_date: '',
+            death_date: '',
+            description: '',
+            nationality: '',
+            id: ''
+        };
+        _this.handleInputChange = _this.handleInputChange.bind(_this);
+        _this.handleSubmit = _this.handleSubmit.bind(_this);
+        return _this;
+    }
+
+    _createClass(UpdateGenreModal, [{
+        key: 'handleInputChange',
+        value: function handleInputChange(event) {
+
+            var value = event.target.value;
+            var name = event.target.name;
+
+            this.setState(_defineProperty({}, name, value));
+        }
+    }, {
+        key: 'handleSubmit',
+        value: function handleSubmit(e) {
+
+            var obj = {
+                first_name: $("#first_nameAuthorUpdate").val(),
+                last_name: $("#last_nameAuthorUpdate").val(),
+                birth_date: $("#birth_dateAuthorUpdate").val(),
+                death_date: $("#death_dateAuthorUpdate").val(),
+                nationality: $("#nationalityAuthorUpdate").val(),
+                description: $("#descriptionAuthorUpdate").val(),
+                id: $("#idAuthorUpdate").val()
+            };
+
+            e.preventDefault();
+            this.props.handleSubmit(obj);
+        }
+    }, {
+        key: 'render',
+        value: function render() {
+            return _react2.default.createElement(
+                'div',
+                { className: 'modal fade', id: 'updateAuthorModal' },
+                _react2.default.createElement(
+                    'div',
+                    { className: 'modal-dialog modal-lg' },
+                    _react2.default.createElement(
+                        'div',
+                        { className: 'modal-content' },
+                        _react2.default.createElement(
+                            'div',
+                            { className: 'modal-header' },
+                            _react2.default.createElement(
+                                'h4',
+                                { className: 'modal-title' },
+                                'Edytuj autora'
+                            ),
+                            _react2.default.createElement(
+                                'button',
+                                { type: 'button', className: 'close btn-danger', 'data-dismiss': 'modal' },
+                                '\xD7'
+                            )
+                        ),
+                        _react2.default.createElement(
+                            'form',
+                            { onSubmit: this.handleSubmit },
+                            _react2.default.createElement(
+                                'div',
+                                { className: 'modal-body' },
+                                _react2.default.createElement(
+                                    'div',
+                                    { className: 'form-group' },
+                                    _react2.default.createElement(
+                                        'label',
+                                        null,
+                                        'Imi\u0119:'
+                                    ),
+                                    _react2.default.createElement('input', { type: 'text', className: 'form-control', id: 'first_nameAuthorUpdate', onChange: this.handleInputChange, name: 'first_name', required: true })
+                                ),
+                                _react2.default.createElement(
+                                    'div',
+                                    { 'class': 'form-group' },
+                                    _react2.default.createElement(
+                                        'label',
+                                        null,
+                                        'Nazwisko:'
+                                    ),
+                                    _react2.default.createElement('input', { type: 'text', className: 'form-control', id: 'last_nameAuthorUpdate', onChange: this.handleInputChange, name: 'last_name', required: true })
+                                ),
+                                _react2.default.createElement(
+                                    'div',
+                                    { 'class': 'form-group' },
+                                    _react2.default.createElement(
+                                        'label',
+                                        null,
+                                        'Data urodzenia:'
+                                    ),
+                                    _react2.default.createElement('input', { type: 'date', className: 'form-control', id: 'birth_dateAuthorUpdate', onChange: this.handleInputChange, name: 'birth_date', required: true })
+                                ),
+                                _react2.default.createElement(
+                                    'div',
+                                    { 'class': 'form-group' },
+                                    _react2.default.createElement(
+                                        'label',
+                                        null,
+                                        'Data \u015Bmierci:'
+                                    ),
+                                    _react2.default.createElement('input', { type: 'date', className: 'form-control', id: 'death_dateAuthorUpdate', onChange: this.handleInputChange, name: 'death_date' })
+                                ),
+                                _react2.default.createElement(
+                                    'div',
+                                    { 'class': 'form-group' },
+                                    _react2.default.createElement(
+                                        'label',
+                                        null,
+                                        'Narodowo\u015B\u0107:'
+                                    ),
+                                    _react2.default.createElement('input', { type: 'text', className: 'form-control', id: 'nationalityAuthorUpdate', onChange: this.handleInputChange, name: 'nationality', required: true })
+                                ),
+                                _react2.default.createElement(
+                                    'div',
+                                    { 'class': 'form-group' },
+                                    _react2.default.createElement(
+                                        'label',
+                                        null,
+                                        '\u017Byciorys:'
+                                    ),
+                                    _react2.default.createElement('textarea', { type: 'text', className: 'form-control', id: 'descriptionAuthorUpdate', onChange: this.handleInputChange, name: 'description', required: true })
+                                ),
+                                _react2.default.createElement('input', { type: 'hidden', name: 'id', id: 'idAuthorUpdate', required: true })
+                            ),
+                            _react2.default.createElement(
+                                'div',
+                                { className: 'modal-footer' },
+                                _react2.default.createElement(
+                                    'button',
+                                    { type: 'button', className: 'btn btn-outline-danger', 'data-dismiss': 'modal' },
+                                    'Anuluj'
+                                ),
+                                _react2.default.createElement(
+                                    'button',
+                                    { type: 'submit', className: 'btn btn-outline-success' },
+                                    'Edytuj'
+                                )
+                            )
+                        )
+                    )
+                )
+            );
+        }
+    }]);
+
+    return UpdateGenreModal;
+}(_react2.default.Component);
+
+exports.default = UpdateGenreModal;
+
+/***/ }),
+/* 86 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+var _react = __webpack_require__(0);
+
+var _react2 = _interopRequireDefault(_react);
+
+var _BookListItem = __webpack_require__(87);
 
 var _BookListItem2 = _interopRequireDefault(_BookListItem);
 
@@ -24354,7 +24595,7 @@ var _UpdateButton = __webpack_require__(13);
 
 var _UpdateButton2 = _interopRequireDefault(_UpdateButton);
 
-var _BookDetailsModal = __webpack_require__(87);
+var _BookDetailsModal = __webpack_require__(88);
 
 var _BookDetailsModal2 = _interopRequireDefault(_BookDetailsModal);
 
@@ -24497,7 +24738,7 @@ var BooksList = function (_React$Component) {
 exports.default = BooksList;
 
 /***/ }),
-/* 86 */
+/* 87 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -24596,7 +24837,7 @@ var BookListItem = function (_React$Component) {
 exports.default = BookListItem;
 
 /***/ }),
-/* 87 */
+/* 88 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -24750,7 +24991,7 @@ var BookDetailsModal = function (_React$Component) {
 exports.default = BookDetailsModal;
 
 /***/ }),
-/* 88 */
+/* 89 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -24766,7 +25007,7 @@ var _react = __webpack_require__(0);
 
 var _react2 = _interopRequireDefault(_react);
 
-var _GenreListItem = __webpack_require__(89);
+var _GenreListItem = __webpack_require__(90);
 
 var _GenreListItem2 = _interopRequireDefault(_GenreListItem);
 
@@ -24774,11 +25015,11 @@ var _CreateButton = __webpack_require__(24);
 
 var _CreateButton2 = _interopRequireDefault(_CreateButton);
 
-var _AddGenreModal = __webpack_require__(90);
+var _AddGenreModal = __webpack_require__(91);
 
 var _AddGenreModal2 = _interopRequireDefault(_AddGenreModal);
 
-var _UpdateGenreModal = __webpack_require__(91);
+var _UpdateGenreModal = __webpack_require__(92);
 
 var _UpdateGenreModal2 = _interopRequireDefault(_UpdateGenreModal);
 
@@ -24960,7 +25201,7 @@ var AuthorsList = function (_React$Component) {
 exports.default = AuthorsList;
 
 /***/ }),
-/* 89 */
+/* 90 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -25056,7 +25297,7 @@ var GenreListItem = function (_React$Component) {
 exports.default = GenreListItem;
 
 /***/ }),
-/* 90 */
+/* 91 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -25191,7 +25432,7 @@ var AddGenreModal = function (_React$Component) {
 exports.default = AddGenreModal;
 
 /***/ }),
-/* 91 */
+/* 92 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";

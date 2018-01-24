@@ -30,7 +30,20 @@ require_once('../controller/AuthorController.php');
      break;
  
      case 'Update':
-     $model = json_decode($_POST['obj'], false);
+     $model->first_name = $_POST['first_name'];
+      $model->last_name = $_POST['last_name'];
+      $model->description = $_POST['description'];
+      $model->nationality = $_POST['nationality'];
+      $model->date_birth = $_POST['birth_date'];
+      $model->date_death = $_POST['death_date'];
+      $model->id = $_POST['id'];
+
+    //   $model->first_name = 'Darekk';
+    //   $model->last_name = 'Czabak';
+    //   $model->description = 'desc';
+    //   $model->nationality = 'nationality';
+    //   $model->date_birth = $czas->getTimezone();
+    //   $model->date_death = $czas->getTimezone();
      $controller->Update($model);
      $controller->GetAll();
      break;
