@@ -1,67 +1,39 @@
 import React from 'react';
 
-class AddBookModal extends React.Component {
+class UpdateBookModal extends React.Component {
 constructor(props) {
     super(props);
-    this.state = {
-        title : '',
-        isbn : '',
-        page_count : '',
-        year : '',
-        author_id : '',
-        genre_id : '',
-        description : ''
-    };
-    this.handleInputChange = this.handleInputChange.bind(this);
-    this.handleSubmit = this.handleSubmit.bind(this);
-  
+
+    this.handleSubmit = this.handleSubmit.bind(this);  
 }
 
-
-handleInputChange(e) {
-    var name = e.target.name;
-    var value = e.target.value;
-
-    this.setState({
-        [name] : value
-    });   
-}
 
 handleSubmit(e) {
 
     var obj = {
-        title : this.state.title,
-        isbn : this.state.isbn,
-        page_count : this.state.page_count,
-        year : this.state.year,
-        author_id : this.state.author_id,
-        genre_id : this.state.genre_id,
-        description : this.state.description
+        title : $("#titleUpdateBook").val(),
+        isbn : $("#isbnUpdateBook").val(),
+        page_count : $("#page_countUpdateBook").val(),
+        year : $("#yearUpdateBook").val(),
+        author_id : $("#author_idUpdateBook").val(),
+        genre_id : $("#genre_idUpdateBook").val(),
+        description : $("#descriptionUpdateBook").val(),
+        id : $("#idUpdateBook").val()
     };
 
     e.preventDefault();
-    this.props.AddBook(obj);
-
-    this.setState({
-        title : '',
-        isbn : '',
-        page_count : '',
-        year : 'yyyy-MM-mm',
-        author_id : '',
-        genre_id : '',
-        description : '',
-    });
+    this.props.UpdateBook(obj);
 }
 
 render() {
     return(
-        <div className="modal fade" id="addBookModal">
+        <div className="modal fade" id="updateBookModal">
             <div className="modal-dialog modal-lg">
                 <div className="modal-content">
                 
                 
                     <div className="modal-header">
-                    <h4 className="modal-title">Dodaj książkę</h4>
+                    <h4 className="modal-title">Edytuj książkę</h4>
                     <button type="button" className="close btn-danger" data-dismiss="modal">&times;</button>
                     </div>
                     
@@ -69,23 +41,23 @@ render() {
                         <div className="modal-body">
                             <div className="form-group">
                                 <label>Tytuł:</label>
-                                <input type="text" className="form-control" value={this.state.title} onChange={this.handleInputChange} name="title" required/>
+                                <input type="text" className="form-control" id="titleUpdateBook" name="title" required/>
                             </div>
                             <div className="form-group">
                                 <label>ISBN:</label>
-                                <input type="text" className="form-control" value={this.state.isbn} onChange={this.handleInputChange} name="isbn" required/>
+                                <input type="text" className="form-control" id="isbnUpdateBook" name="isbn" required/>
                             </div>
                             <div className="form-group">
                                 <label>Page count:</label>
-                                <input type="text" className="form-control" value={this.state.page_count} onChange={this.handleInputChange} name="page_count" required/>
+                                <input type="text" className="form-control" id="page_countUpdateBook" name="page_count" required/>
                             </div>
                             <div className="form-group">
                                 <label>Rok wydania:</label>
-                                <input type="date" className="form-control" value={this.state.year} onChange={this.handleInputChange} name="year" required/>
+                                <input type="date" className="form-control" id="yearUpdateBook"  name="year" required/>
                             </div>
                             <div className="form-group">
                                 <label>Autor:</label>
-                                <select className="form-control" value={this.state.author_id} onChange={this.handleInputChange} name="author_id" required>
+                                <select className="form-control" id="author_idUpdateBook" name="author_id" required>
                                 <option disabled selected></option>
                                 {
                                        this.props.authors.map((item,index) =>
@@ -95,7 +67,7 @@ render() {
                             </div>
                             <div className="form-group">
                                 <label>Gatunek:</label>
-                                <select className="form-control" value={this.state.genre_id} onChange={this.handleInputChange} name="genre_id" required>
+                                <select className="form-control" id="genre_idUpdateBook" name="genre_id" required>
                                 <option disabled selected></option>
                                     {
                                         this.props.genres.map((item,index) => 
@@ -106,12 +78,13 @@ render() {
                        
                             <div className="form-group">
                                 <label>Opis:</label>
-                                <textarea type="text" className="form-control" value={this.state.description} onChange={this.handleInputChange} name="description" required/>
+                                <textarea type="text" className="form-control" id="descriptionUpdateBook" name="description" required/>
                             </div>
+                            <input type="hidden" id="idUpdateBook" />
                         </div>
                         <div className="modal-footer">
                             <button type="button" className="btn btn-outline-danger" data-dismiss="modal">Anuluj</button>
-                            <button type="submit" className="btn btn-outline-success">Dodaj</button>
+                            <button type="submit" className="btn btn-outline-success">Edytuj</button>
                         </div>
                     </form>
                 </div>
@@ -123,4 +96,4 @@ render() {
 
 }
 
-export default AddBookModal;
+export default UpdateBookModal;

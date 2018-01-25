@@ -31,8 +31,17 @@ require_once('../model/Book.php');
      break;
  
      case 'Update':
-     $model = json_decode($_POST['obj'], false);
+     $model->title = $_POST['title'];
+     $model->isbn = $_POST['isbn'];
+     $model->page_count = $_POST['page_count'];
+     $model->year = $_POST['year'];
+     $model->author_id = $_POST['author_id'];
+     $model->genre_id = $_POST['genre_id'];
+     $model->description = $_POST['description'];
+     $model->id = $_POST['id'];
+
      $controller->Update($model);
+     $controller->GetAll();
      break;
  
      case 'Delete':

@@ -5,6 +5,7 @@ import DeleteButton from './DeleteButton.js';
 import UpdateButton from './UpdateButton.js';
 import BookDetailsModal from './BookDetailsModal.js';
 import AddBookModal from './AddBookModal.js';
+import UpdateBookModal from './UpdateBookModal.js';
 
 class BooksList extends React.Component {
     constructor(props) {
@@ -14,7 +15,8 @@ class BooksList extends React.Component {
             authors: [],
             genres: []
         };
-        this.AddBook = this.AddBook.bind(this);
+        
+        this.UpdateBook = this.UpdateBook.bind(this);
     }
 
     componentDidMount() {
@@ -98,6 +100,36 @@ class BooksList extends React.Component {
         });
     }
 
+    UpdateBook(book) {
+        var self = this;
+
+        $.ajax({
+            type : "POST",
+            url : "switcher/BookSwitcher.php?q=Update",
+            data : {
+                title : book.title,
+                isbn : book.isbn,
+                page_count : book.page_count,
+                year : book.year,
+                author_id : book.author_id,
+                genre_id : book.genre_id,
+                description : book.description,
+                id : book.id
+            },
+            success: function(data) {
+                var booksData = JSON.parse(data);
+                $("#updateBookModal").modal("hide");
+                alert("Edytowano rekord");
+                self.setState({
+                    books : booksData
+                });
+            },
+            error : function() {
+                alert("Wystąpił problem podczas edytowania rekordu");
+            }
+        });
+    }
+
     render () {
         return(
             <div className="col-lg-12">
@@ -123,6 +155,7 @@ class BooksList extends React.Component {
                 </table>
                 <BookDetailsModal/>
                 <AddBookModal AddBook={(i) => this.AddBook(i)} genres={this.state.genres} authors={this.state.authors}/>
+                <UpdateBookModal UpdateBook={(book) => this.UpdateBook(book)} genres={this.state.genres} authors={this.state.authors}/>
             </div>
         )
     }
