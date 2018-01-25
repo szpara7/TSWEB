@@ -18,8 +18,16 @@ require_once('../model/Book.php');
      break;
  
      case 'Add': 
-     $model = json_decode($_POST['obj'], false); //to raczej nie bedzie dzialalo
+     $model->title = $_POST['title'];
+     $model->isbn = $_POST['isbn'];
+     $model->page_count = $_POST['page_count'];
+     $model->year = $_POST['year'];
+     $model->author_id = $_POST['author_id'];
+     $model->genre_id = $_POST['genre_id'];
+     $model->description = $_POST['description'];
+     
      $controller->Add($model);
+     $controller->GetAll();
      break;
  
      case 'Update':

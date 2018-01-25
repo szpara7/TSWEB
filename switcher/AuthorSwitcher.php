@@ -4,11 +4,11 @@ require_once('../controller/AuthorController.php');
  $controller = new AuthorController();
  $model = new Author();
  $czas = new DateTime();
-    if(empty($_GET['q'])) {
-     die();
- }
+    if (empty($_GET['q'])) {
+        die();
+    }
 
- switch($_GET['q']) {
+ switch ($_GET['q']) {
      case 'GetAll':
      $controller->GetAll();
      break;
@@ -18,14 +18,14 @@ require_once('../controller/AuthorController.php');
      $controller->GetById($id);
      break;
  
-     case 'Add':      
+     case 'Add':
     $model->first_name = $_POST['first_name'];
       $model->last_name = $_POST['last_name'];
       $model->description = $_POST['description'];
       $model->nationality = $_POST['nationality'];
       $model->date_birth = $_POST['birth_date'];
       $model->date_death = $_POST['death_date'];
-     $controller->Add($model);  
+     $controller->Add($model);
      $controller->GetAll();
      break;
  
@@ -37,13 +37,6 @@ require_once('../controller/AuthorController.php');
       $model->date_birth = $_POST['birth_date'];
       $model->date_death = $_POST['death_date'];
       $model->id = $_POST['id'];
-
-    //   $model->first_name = 'Darekk';
-    //   $model->last_name = 'Czabak';
-    //   $model->description = 'desc';
-    //   $model->nationality = 'nationality';
-    //   $model->date_birth = $czas->getTimezone();
-    //   $model->date_death = $czas->getTimezone();
      $controller->Update($model);
      $controller->GetAll();
      break;
@@ -54,5 +47,3 @@ require_once('../controller/AuthorController.php');
      $controller->GetAll();
      break;
  }
-
- ?>

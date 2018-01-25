@@ -2817,7 +2817,7 @@ var _BooksList = __webpack_require__(86);
 
 var _BooksList2 = _interopRequireDefault(_BooksList);
 
-var _GenresList = __webpack_require__(89);
+var _GenresList = __webpack_require__(90);
 
 var _GenresList2 = _interopRequireDefault(_GenresList);
 
@@ -24599,6 +24599,10 @@ var _BookDetailsModal = __webpack_require__(88);
 
 var _BookDetailsModal2 = _interopRequireDefault(_BookDetailsModal);
 
+var _AddBookModal = __webpack_require__(89);
+
+var _AddBookModal2 = _interopRequireDefault(_AddBookModal);
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -24616,19 +24620,24 @@ var BooksList = function (_React$Component) {
         var _this = _possibleConstructorReturn(this, (BooksList.__proto__ || Object.getPrototypeOf(BooksList)).call(this, props));
 
         _this.state = {
-            books: []
+            books: [],
+            authors: [],
+            genres: []
         };
+        _this.AddBook = _this.AddBook.bind(_this);
         return _this;
     }
 
     _createClass(BooksList, [{
         key: 'componentDidMount',
         value: function componentDidMount() {
-            this.Update();
+            this.GetAll();
+            this.GetAuthors();
+            this.GetGenres();
         }
     }, {
-        key: 'Update',
-        value: function Update() {
+        key: 'GetAll',
+        value: function GetAll() {
             var _this2 = this;
 
             fetch('http://localhost:8080/switcher/BookSwitcher.php?q=GetAll').then(function (response) {
@@ -24638,14 +24647,36 @@ var BooksList = function (_React$Component) {
             });
         }
     }, {
+        key: 'GetAuthors',
+        value: function GetAuthors() {
+            var _this3 = this;
+
+            fetch('http://localhost:8080/switcher/AuthorSwitcher.php?q=GetAll').then(function (response) {
+                return response.json();
+            }).then(function (json) {
+                _this3.setState({ authors: json });
+            });
+        }
+    }, {
+        key: 'GetGenres',
+        value: function GetGenres() {
+            var _this4 = this;
+
+            fetch('http://localhost:8080/switcher/GenreSwitcher.php?q=GetAll').then(function (response) {
+                return response.json();
+            }).then(function (json) {
+                _this4.setState({ genres: json });
+            });
+        }
+    }, {
         key: 'Delete',
         value: function Delete(id) {
-            var _this3 = this;
+            var _this5 = this;
 
             fetch('http://localhost:8080/switcher/BookSwitcher.php?q=Delete&id=' + id).then(function (response) {
                 return response.json();
             }).then(function (response) {
-                _this3.setState({ books: response });
+                _this5.setState({ books: response });
             });
             alert("Usunięto rekord");
         }
@@ -24663,9 +24694,39 @@ var BooksList = function (_React$Component) {
             $('#bookDetailsModal').modal('show');
         }
     }, {
+        key: 'AddBook',
+        value: function AddBook(book) {
+            var self = this;
+
+            $.ajax({
+                type: "POST",
+                url: "switcher/BookSwitcher.php?q=Add",
+                data: {
+                    title: book.title,
+                    isbn: book.isbn,
+                    page_count: book.page_count,
+                    year: book.year,
+                    author_id: book.author_id,
+                    genre_id: book.genre_id,
+                    description: book.description
+                },
+                success: function success(data) {
+                    var booksData = JSON.parse(data);
+                    $("#addBookModal").modal("hide");
+                    alert("Dodano nowy rekord");
+                    self.setState({
+                        books: booksData
+                    });
+                },
+                error: function error() {
+                    alert("Wystąpił problem podczas dodawania rekordu");
+                }
+            });
+        }
+    }, {
         key: 'render',
         value: function render() {
-            var _this4 = this;
+            var _this6 = this;
 
             return _react2.default.createElement(
                 'div',
@@ -24681,7 +24742,7 @@ var BooksList = function (_React$Component) {
                     _react2.default.createElement(
                         'div',
                         { className: 'offset-lg-8 col-lg-2 pt-2 float-right' },
-                        _react2.default.createElement(_CreateButton2.default, null)
+                        _react2.default.createElement(_CreateButton2.default, { modalId: '#addBookModal' })
                     )
                 ),
                 _react2.default.createElement(
@@ -24720,14 +24781,17 @@ var BooksList = function (_React$Component) {
                         null,
                         this.state.books.map(function (item, index) {
                             return _react2.default.createElement(_BookListItem2.default, { handleDetailsClick: function handleDetailsClick(book) {
-                                    return _this4.Details(book);
+                                    return _this6.Details(book);
                                 }, deleteBook: function deleteBook(id) {
-                                    return _this4.Delete(id);
+                                    return _this6.Delete(id);
                                 }, key: index, book: item });
                         })
                     )
                 ),
-                _react2.default.createElement(_BookDetailsModal2.default, null)
+                _react2.default.createElement(_BookDetailsModal2.default, null),
+                _react2.default.createElement(_AddBookModal2.default, { AddBook: function AddBook(i) {
+                        return _this6.AddBook(i);
+                    }, genres: this.state.genres, authors: this.state.authors })
             );
         }
     }]);
@@ -25007,7 +25071,242 @@ var _react = __webpack_require__(0);
 
 var _react2 = _interopRequireDefault(_react);
 
-var _GenreListItem = __webpack_require__(90);
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+var AddBookModal = function (_React$Component) {
+    _inherits(AddBookModal, _React$Component);
+
+    function AddBookModal(props) {
+        _classCallCheck(this, AddBookModal);
+
+        var _this = _possibleConstructorReturn(this, (AddBookModal.__proto__ || Object.getPrototypeOf(AddBookModal)).call(this, props));
+
+        _this.state = {
+            title: '',
+            isbn: '',
+            page_count: '',
+            year: '',
+            author_id: '',
+            genre_id: '',
+            description: ''
+        };
+        _this.handleInputChange = _this.handleInputChange.bind(_this);
+        _this.handleSubmit = _this.handleSubmit.bind(_this);
+        return _this;
+    }
+
+    _createClass(AddBookModal, [{
+        key: 'handleInputChange',
+        value: function handleInputChange(e) {
+            var name = e.target.name;
+            var value = e.target.value;
+
+            this.setState(_defineProperty({}, name, value));
+        }
+    }, {
+        key: 'handleSubmit',
+        value: function handleSubmit(e) {
+
+            var obj = {
+                title: this.state.title,
+                isbn: this.state.isbn,
+                page_count: this.state.page_count,
+                year: this.state.year,
+                author_id: this.state.author_id,
+                genre_id: this.state.genre_id,
+                description: this.state.description
+            };
+
+            e.preventDefault();
+            this.props.AddBook(obj);
+
+            this.setState({
+                title: '',
+                isbn: '',
+                page_count: '',
+                year: 'yyyy-MM-mm',
+                author_id: '',
+                genre_id: '',
+                description: ''
+            });
+        }
+    }, {
+        key: 'render',
+        value: function render() {
+            return _react2.default.createElement(
+                'div',
+                { className: 'modal fade', id: 'addBookModal' },
+                _react2.default.createElement(
+                    'div',
+                    { className: 'modal-dialog modal-lg' },
+                    _react2.default.createElement(
+                        'div',
+                        { className: 'modal-content' },
+                        _react2.default.createElement(
+                            'div',
+                            { className: 'modal-header' },
+                            _react2.default.createElement(
+                                'h4',
+                                { className: 'modal-title' },
+                                'Dodaj ksi\u0105\u017Ck\u0119'
+                            ),
+                            _react2.default.createElement(
+                                'button',
+                                { type: 'button', className: 'close btn-danger', 'data-dismiss': 'modal' },
+                                '\xD7'
+                            )
+                        ),
+                        _react2.default.createElement(
+                            'form',
+                            { onSubmit: this.handleSubmit },
+                            _react2.default.createElement(
+                                'div',
+                                { className: 'modal-body' },
+                                _react2.default.createElement(
+                                    'div',
+                                    { className: 'form-group' },
+                                    _react2.default.createElement(
+                                        'label',
+                                        null,
+                                        'Tytu\u0142:'
+                                    ),
+                                    _react2.default.createElement('input', { type: 'text', className: 'form-control', value: this.state.title, onChange: this.handleInputChange, name: 'title', required: true })
+                                ),
+                                _react2.default.createElement(
+                                    'div',
+                                    { className: 'form-group' },
+                                    _react2.default.createElement(
+                                        'label',
+                                        null,
+                                        'ISBN:'
+                                    ),
+                                    _react2.default.createElement('input', { type: 'text', className: 'form-control', value: this.state.isbn, onChange: this.handleInputChange, name: 'isbn', required: true })
+                                ),
+                                _react2.default.createElement(
+                                    'div',
+                                    { className: 'form-group' },
+                                    _react2.default.createElement(
+                                        'label',
+                                        null,
+                                        'Page count:'
+                                    ),
+                                    _react2.default.createElement('input', { type: 'text', className: 'form-control', value: this.state.page_count, onChange: this.handleInputChange, name: 'page_count', required: true })
+                                ),
+                                _react2.default.createElement(
+                                    'div',
+                                    { className: 'form-group' },
+                                    _react2.default.createElement(
+                                        'label',
+                                        null,
+                                        'Rok wydania:'
+                                    ),
+                                    _react2.default.createElement('input', { type: 'date', className: 'form-control', value: this.state.year, onChange: this.handleInputChange, name: 'year', required: true })
+                                ),
+                                _react2.default.createElement(
+                                    'div',
+                                    { className: 'form-group' },
+                                    _react2.default.createElement(
+                                        'label',
+                                        null,
+                                        'Autor:'
+                                    ),
+                                    _react2.default.createElement(
+                                        'select',
+                                        { className: 'form-control', value: this.state.author_id, onChange: this.handleInputChange, name: 'author_id', required: true },
+                                        _react2.default.createElement('option', { disabled: true, selected: true }),
+                                        this.props.authors.map(function (item, index) {
+                                            return _react2.default.createElement(
+                                                'option',
+                                                { value: item.id, key: index },
+                                                item.first_name + ' ' + item.last_name
+                                            );
+                                        })
+                                    )
+                                ),
+                                _react2.default.createElement(
+                                    'div',
+                                    { className: 'form-group' },
+                                    _react2.default.createElement(
+                                        'label',
+                                        null,
+                                        'Gatunek:'
+                                    ),
+                                    _react2.default.createElement(
+                                        'select',
+                                        { className: 'form-control', value: this.state.genre_id, onChange: this.handleInputChange, name: 'genre_id', required: true },
+                                        _react2.default.createElement('option', { disabled: true, selected: true }),
+                                        this.props.genres.map(function (item, index) {
+                                            return _react2.default.createElement(
+                                                'option',
+                                                { value: item.id, key: index },
+                                                item.name
+                                            );
+                                        })
+                                    )
+                                ),
+                                _react2.default.createElement(
+                                    'div',
+                                    { className: 'form-group' },
+                                    _react2.default.createElement(
+                                        'label',
+                                        null,
+                                        'Opis:'
+                                    ),
+                                    _react2.default.createElement('textarea', { type: 'text', className: 'form-control', value: this.state.description, onChange: this.handleInputChange, name: 'description', required: true })
+                                )
+                            ),
+                            _react2.default.createElement(
+                                'div',
+                                { className: 'modal-footer' },
+                                _react2.default.createElement(
+                                    'button',
+                                    { type: 'button', className: 'btn btn-outline-danger', 'data-dismiss': 'modal' },
+                                    'Anuluj'
+                                ),
+                                _react2.default.createElement(
+                                    'button',
+                                    { type: 'submit', className: 'btn btn-outline-success' },
+                                    'Dodaj'
+                                )
+                            )
+                        )
+                    )
+                )
+            );
+        }
+    }]);
+
+    return AddBookModal;
+}(_react2.default.Component);
+
+exports.default = AddBookModal;
+
+/***/ }),
+/* 90 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+var _react = __webpack_require__(0);
+
+var _react2 = _interopRequireDefault(_react);
+
+var _GenreListItem = __webpack_require__(91);
 
 var _GenreListItem2 = _interopRequireDefault(_GenreListItem);
 
@@ -25015,11 +25314,11 @@ var _CreateButton = __webpack_require__(24);
 
 var _CreateButton2 = _interopRequireDefault(_CreateButton);
 
-var _AddGenreModal = __webpack_require__(91);
+var _AddGenreModal = __webpack_require__(92);
 
 var _AddGenreModal2 = _interopRequireDefault(_AddGenreModal);
 
-var _UpdateGenreModal = __webpack_require__(92);
+var _UpdateGenreModal = __webpack_require__(93);
 
 var _UpdateGenreModal2 = _interopRequireDefault(_UpdateGenreModal);
 
@@ -25201,7 +25500,7 @@ var AuthorsList = function (_React$Component) {
 exports.default = AuthorsList;
 
 /***/ }),
-/* 90 */
+/* 91 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -25297,7 +25596,7 @@ var GenreListItem = function (_React$Component) {
 exports.default = GenreListItem;
 
 /***/ }),
-/* 91 */
+/* 92 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -25432,7 +25731,7 @@ var AddGenreModal = function (_React$Component) {
 exports.default = AddGenreModal;
 
 /***/ }),
-/* 92 */
+/* 93 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
