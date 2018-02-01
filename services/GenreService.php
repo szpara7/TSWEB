@@ -5,8 +5,8 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-require_once ('../dal/Database.php');
-require_once ('../model/Genre.php');
+require_once ('./dal/Database.php');
+require_once ('./model/Genre.php');
 /**
  * Description of Author
  *
@@ -27,7 +27,7 @@ class GenreService extends Database
     
     public function GetById($id)
     {
-        $stmt = $this->connection->prepare('SELECT g.name, count(b.id) from genre g left Join book b on b.genre_id=g.id where g.id = :genre_id GROUP by g.name');
+        $stmt = $this->connection->prepare('SELECT g.id, g.name, count(b.id) from genre g left Join book b on b.genre_id=g.id where g.id = :genre_id GROUP by g.name');
         $stmt->bindParam(':genre_id', $id);
         $stmt->execute();
         $result = $stmt->setFetchMode(PDO::FETCH_ASSOC);

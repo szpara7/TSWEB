@@ -1,12 +1,13 @@
 <?php
 
-require_once('./services/BookService.php');
+require_once('./services/GenreService.php');
+require_once('./model/Genre.php');
 
-class BookController {
+class GenreApiController {
 
     public function GetAll() 
     {
-        $service = new BookService();
+        $service = new GenreService();
         $data = $service->GetAll();
         $service->Disconnect();
         echo json_encode($data);
@@ -14,32 +15,39 @@ class BookController {
 
     public function GetById($id)
     {
-        $service = new BookService();
+        $service = new GenreService();
         $data = $service->GetById($id);
         $service->Disconnect();
         echo json_encode($data);
     }
 
-    public function Add($model)
+    public function Add()
     {
-        $service = new BookService();
-        
+        $service = new GenreService();
+        $model = new Genre();
+        $model->name = $_POST['name'];
         $service->Add($model);
+        $service->GetAll();
         $service->Disconnect();
     }
 
     public function Update($model) 
     {
-        $service = new BookService();
+        $service = new GenreService();
+        $model = new Genre();
 
+        $model->id = $_POST['id'];
+        $model->name = $_POST['name'];
         $service->Update($model);
+        $service->GetAll();
         $service->Disconnect();
     }
 
     public function Delete($id)
     {
-        $service = new BookService();
+        $service = new GenreService();
         $service->Delete($id);
+        $service->GetAll();
         $service->Disconnect();
     }
 }

@@ -5,8 +5,8 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-require_once ('../dal/Database.php');
-require_once ('../model/Author.php');
+require_once ('./dal/Database.php');
+require_once ('./model/Author.php');
 /**
  * Description of Author
  *

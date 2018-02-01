@@ -5,8 +5,8 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-require_once ('../dal/Database.php');
-require_once ('../model/Book.php');
+require_once ('./dal/Database.php');
+require_once ('./model/Book.php');
 /**
  * Description of Author
  *
@@ -29,9 +29,9 @@ class BookService extends Database
     
     public function GetById($id)
     {
-        $stmt = $this->connection->prepare('SELECT b.id, b.title, b.description, b.isbn, b.page_count
-        , b.year, b.author_id, b.genre_id, a.first_name, a.last_name, g.name FROM Book b JOIN Author a ON b.author_id = a.id JOIN Genre g ON
-        b.genre_id = g.id WHERE id = :book_id');
+        $stmt = $this->connection->prepare('SELECT b.id, b.title, b.description, b.isbn, b.page_count, b.year
+        , b.author_id, b.genre_id, a.first_name, a.last_name, g.name FROM Book b JOIN Author a 
+        ON b.author_id = a.id JOIN Genre g ON b.genre_id = g.id WHERE b.id = :book_id');
         $stmt->bindParam(':book_id', $id);
         $stmt->execute();
         $result = $stmt->setFetchMode(PDO::FETCH_ASSOC);

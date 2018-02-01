@@ -120,7 +120,6 @@ render() {
     )
 }
 
-
 }
 
 export default AddBookModal;
