@@ -18,7 +18,7 @@ class AuthorsList extends React.Component {
             authors: []
         }
 
-        this.addAuthor = this.addAuthor.bind(this);
+        this.AddAuthor = this.AddAuthor.bind(this);
         this.UpdateAuthor = this.UpdateAuthor.bind(this);
     }
 
@@ -48,30 +48,53 @@ class AuthorsList extends React.Component {
                         }
                     </tbody>
                 </table>
-                <AddAuthorModal addAuthor={(author) => this.addAuthor(author)}/>    
+                <AddAuthorModal addAuthor={(author) => this.AddAuthor(author)}/>    
                 <AuthorDetailsModal/>   
                 <UpdateAuthorModal handleSubmit={(i) => this.UpdateAuthor(i)}/>       
             </div>
         )
     }
     
-    Delete(id)
+    // Delete(id)
+    // {
+    //     fetch('http://localhost:8080/switcher/AuthorSwitcher.php?q=Delete&id='+id)
+    //    .then(res => res.json())
+    //    .then(json => {
+    //         this.setState({ authors: json});
+    //    });
+    //    alert('Usunięto rekord');
+    // }
+
+      Delete(id)
     {
-        fetch('http://localhost:8080/switcher/AuthorSwitcher.php?q=Delete&id='+id)
-       .then(res => res.json())
-       .then(json => {
-            this.setState({ authors: json});
-       });
-       alert('Usunięto rekord');
+        var self = this;
+        $.ajax({
+            type : 'DELETE',
+            url : '/authors/' + id,
+            success : function() {                
+                alert('Usunięto rekord');
+                self.GetAll();
+            } 
+        });
     }
 
     GetAll()
     {
-        fetch('http://localhost:8080/switcher/AuthorSwitcher.php?q=GetAll')
-          .then(response => response.json())
-          .then(json => {
-            this.setState({ authors: json});
-          });
+        var self = this;
+        $.ajax({
+            type : 'GET',
+            url : '/authors',
+            success: function(data) {
+                var authorsData = JSON.parse(data);
+                self.setState({
+                    authors : authorsData
+                }) 
+            },
+            error : function() {
+                alert("Coś poszło nie tak");
+            }
+        });
+        
           
     }
 
@@ -83,32 +106,29 @@ class AuthorsList extends React.Component {
         $("#detailNationality").text(author.nationality);
 
         $('#authorDetailsModal').modal('show');
-
     }
 
-    
-
-    addAuthor(author)
+    AddAuthor(author)
     {
+        var obj = {
+            first_name : author.first_name,
+            last_name : author.last_name,
+            description : author.description,
+            nationality : author.nationality,
+            birth_date : author.birth_date,
+            death_date : author.death_date
+        };
+        obj = JSON.stringify(obj);
+
       var self = this;
         $.ajax({
             type: "POST",
-            url : "switcher/AuthorSwitcher.php?q=Add",
-            data: {
-                first_name : author.first_name,
-                last_name : author.last_name,
-                description : author.description,
-                nationality : author.nationality,
-                birth_date : author.birth_date,
-                death_date : author.death_date
-            },
-            success: function(data) {    
-                var authorsData = JSON.parse(data);
+            url : "/authors",
+            data: obj,
+            success: function() {    
                 $("#addAuthorModal").modal('hide');
                 alert("Dodano nowy rekord");  
-                self.setState({
-                    authors: authorsData
-                });
+                self.GetAll();
             },
             error: function() {
                 alert("Wystąpił problem podczas dodawania rekordu");
@@ -118,25 +138,26 @@ class AuthorsList extends React.Component {
 
     UpdateAuthor(author) {
         var self = this;
+
+        var obj = {
+            id : author.id,
+            first_name : author.first_name,
+            last_name : author.last_name,
+            description : author.description,
+            nationality : author.nationality,
+            birth_date : author.birth_date,
+            death_date : author.death_date
+        };
+        obj = JSON.stringify(obj);
+
         $.ajax({
-            type: "POST",
-            url : "switcher/AuthorSwitcher.php?q=Update",
-            data: {
-                first_name : author.first_name,
-                last_name : author.last_name,
-                description : author.description,
-                nationality : author.nationality,
-                birth_date : author.birth_date,
-                death_date : author.death_date,
-                id : author.id
-            },
-            success: function(data) {    
-                var authorsData = JSON.parse(data);
+            type: "PUT",
+            url : "/authors",
+            data: obj,
+            success: function() {    
                 $("#updateAuthorModal").modal('hide');
                 alert("Edytowano rekord");  
-                self.setState({
-                    authors: authorsData
-                });
+                self.GetAll();
             },
             error: function() {
                 alert("Wystąpił problem podczas edytowania rekordu");

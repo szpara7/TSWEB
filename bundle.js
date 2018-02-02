@@ -23882,7 +23882,7 @@ var AuthorsList = function (_React$Component) {
             authors: []
         };
 
-        _this.addAuthor = _this.addAuthor.bind(_this);
+        _this.AddAuthor = _this.AddAuthor.bind(_this);
         _this.UpdateAuthor = _this.UpdateAuthor.bind(_this);
         return _this;
     }
@@ -23953,7 +23953,7 @@ var AuthorsList = function (_React$Component) {
                     )
                 ),
                 _react2.default.createElement(_AddAuthorModal2.default, { addAuthor: function addAuthor(author) {
-                        return _this2.addAuthor(author);
+                        return _this2.AddAuthor(author);
                     } }),
                 _react2.default.createElement(_AuthorDetailsModal2.default, null),
                 _react2.default.createElement(_UpdateAuthorModal2.default, { handleSubmit: function handleSubmit(i) {
@@ -23961,27 +23961,46 @@ var AuthorsList = function (_React$Component) {
                     } })
             );
         }
+
+        // Delete(id)
+        // {
+        //     fetch('http://localhost:8080/switcher/AuthorSwitcher.php?q=Delete&id='+id)
+        //    .then(res => res.json())
+        //    .then(json => {
+        //         this.setState({ authors: json});
+        //    });
+        //    alert('Usunięto rekord');
+        // }
+
     }, {
         key: 'Delete',
         value: function Delete(id) {
-            var _this3 = this;
-
-            fetch('http://localhost:8080/switcher/AuthorSwitcher.php?q=Delete&id=' + id).then(function (res) {
-                return res.json();
-            }).then(function (json) {
-                _this3.setState({ authors: json });
+            var self = this;
+            $.ajax({
+                type: 'DELETE',
+                url: '/authors/' + id,
+                success: function success() {
+                    alert('Usunięto rekord');
+                    self.GetAll();
+                }
             });
-            alert('Usunięto rekord');
         }
     }, {
         key: 'GetAll',
         value: function GetAll() {
-            var _this4 = this;
-
-            fetch('http://localhost:8080/switcher/AuthorSwitcher.php?q=GetAll').then(function (response) {
-                return response.json();
-            }).then(function (json) {
-                _this4.setState({ authors: json });
+            var self = this;
+            $.ajax({
+                type: 'GET',
+                url: '/authors',
+                success: function success(data) {
+                    var authorsData = JSON.parse(data);
+                    self.setState({
+                        authors: authorsData
+                    });
+                },
+                error: function error() {
+                    alert("Coś poszło nie tak");
+                }
             });
         }
     }, {
@@ -23996,27 +24015,27 @@ var AuthorsList = function (_React$Component) {
             $('#authorDetailsModal').modal('show');
         }
     }, {
-        key: 'addAuthor',
-        value: function addAuthor(author) {
+        key: 'AddAuthor',
+        value: function AddAuthor(author) {
+            var obj = {
+                first_name: author.first_name,
+                last_name: author.last_name,
+                description: author.description,
+                nationality: author.nationality,
+                birth_date: author.birth_date,
+                death_date: author.death_date
+            };
+            obj = JSON.stringify(obj);
+
             var self = this;
             $.ajax({
                 type: "POST",
-                url: "switcher/AuthorSwitcher.php?q=Add",
-                data: {
-                    first_name: author.first_name,
-                    last_name: author.last_name,
-                    description: author.description,
-                    nationality: author.nationality,
-                    birth_date: author.birth_date,
-                    death_date: author.death_date
-                },
-                success: function success(data) {
-                    var authorsData = JSON.parse(data);
+                url: "/authors",
+                data: obj,
+                success: function success() {
                     $("#addAuthorModal").modal('hide');
                     alert("Dodano nowy rekord");
-                    self.setState({
-                        authors: authorsData
-                    });
+                    self.GetAll();
                 },
                 error: function error() {
                     alert("Wystąpił problem podczas dodawania rekordu");
@@ -24027,25 +24046,26 @@ var AuthorsList = function (_React$Component) {
         key: 'UpdateAuthor',
         value: function UpdateAuthor(author) {
             var self = this;
+
+            var obj = {
+                id: author.id,
+                first_name: author.first_name,
+                last_name: author.last_name,
+                description: author.description,
+                nationality: author.nationality,
+                birth_date: author.birth_date,
+                death_date: author.death_date
+            };
+            obj = JSON.stringify(obj);
+
             $.ajax({
-                type: "POST",
-                url: "switcher/AuthorSwitcher.php?q=Update",
-                data: {
-                    first_name: author.first_name,
-                    last_name: author.last_name,
-                    description: author.description,
-                    nationality: author.nationality,
-                    birth_date: author.birth_date,
-                    death_date: author.death_date,
-                    id: author.id
-                },
-                success: function success(data) {
-                    var authorsData = JSON.parse(data);
+                type: "PUT",
+                url: "/authors",
+                data: obj,
+                success: function success() {
                     $("#updateAuthorModal").modal('hide');
                     alert("Edytowano rekord");
-                    self.setState({
-                        authors: authorsData
-                    });
+                    self.GetAll();
                 },
                 error: function error() {
                     alert("Wystąpił problem podczas edytowania rekordu");

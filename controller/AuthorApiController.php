@@ -25,12 +25,15 @@ class AuthorApiController
         $service = new AuthorService();
         $model = new Author();
 
-        $model->first_name = $_POST['first_name'];
-        $model->last_name = $_POST['last_name'];
-        $model->description = $_POST['description'];
-        $model->nationality = $_POST['nationality'];
-        $model->date_birth = $_POST['birth_date'];
-        $model->date_death = $_POST['death_date'];
+        $input = json_decode(file_get_contents('php://input'), true);
+        echo $input['first_name'];
+
+        $model->first_name = $input['first_name'];
+        $model->last_name = $input['last_name'];
+        $model->description = $input['description'];
+        $model->nationality = $input['nationality'];
+        $model->date_birth = $input['birth_date'];
+        $model->date_death = $input['death_date'];
 
         $service->Add($model);
         $service->GetAll();
@@ -41,18 +44,19 @@ class AuthorApiController
     {
         $service = new AuthorService();
         $model = new Author();
+        $input = json_decode(file_get_contents('php://input'), true);
 
-        $model->first_name = $_POST['first_name'];
-        $model->last_name = $_POST['last_name'];
-        $model->description = $_POST['description'];
-        $model->nationality = $_POST['nationality'];
-        $model->date_birth = $_POST['birth_date'];
-        $model->date_death = $_POST['death_date'];
-        $model->id = $_POST['id'];
-
+        $model->first_name = $input['first_name'];
+        $model->last_name = $input['last_name'];
+        $model->description = $input['description'];
+        $model->nationality = $input['nationality'];
+        $model->date_birth = $input['birth_date'];
+        $model->date_death = $input['death_date'];
+        $model->id = $input['id'];
+        
         $service->Update($model);
-        $service->GetAll();
         $service->Disconnect();
+        return true;
     }
 
     public function Delete($id)

@@ -1,4 +1,5 @@
 <?php
+header("access-control-allow-origin: *"); 
 
 require_once('AltoRouter.php');
 require_once('./controller/AuthorApiController.php');
