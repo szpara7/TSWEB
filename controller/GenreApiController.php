@@ -25,21 +25,27 @@ class GenreApiController {
     {
         $service = new GenreService();
         $model = new Genre();
-        $model->name = $_POST['name'];
+
+        $input = json_decode(file_get_contents('php://input'), true);
+
+        $model->name = $input['name'];
+
         $service->Add($model);
-        $service->GetAll();
         $service->Disconnect();
     }
 
-    public function Update($model) 
+    public function Update() 
     {
         $service = new GenreService();
         $model = new Genre();
 
-        $model->id = $_POST['id'];
-        $model->name = $_POST['name'];
+        $input = json_decode(file_get_contents('php://input'), true);
+
+        $model->id = $input['id'];
+        $model->name = $input['name'];
+
         $service->Update($model);
-        $service->GetAll();
+
         $service->Disconnect();
     }
 

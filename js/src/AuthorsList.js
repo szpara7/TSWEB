@@ -88,14 +88,12 @@ class AuthorsList extends React.Component {
                 var authorsData = JSON.parse(data);
                 self.setState({
                     authors : authorsData
-                }) 
+                }); 
             },
             error : function() {
                 alert("Coś poszło nie tak");
             }
-        });
-        
-          
+        });          
     }
 
     Details(author) {

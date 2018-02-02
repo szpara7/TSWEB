@@ -26,8 +26,7 @@ class AuthorApiController
         $model = new Author();
 
         $input = json_decode(file_get_contents('php://input'), true);
-        echo $input['first_name'];
-
+        
         $model->first_name = $input['first_name'];
         $model->last_name = $input['last_name'];
         $model->description = $input['description'];

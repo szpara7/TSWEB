@@ -6,18 +6,18 @@ import UpdateGenreModal from './UpdateGenreModal.js';
 
 
 
-class AuthorsList extends React.Component {
+class GenresList extends React.Component {
     constructor(props)
     {
         super(props);
 
         this.state = {
-            //tu funkcja z ajaxa
             genres: []
         }
 
         this.AddGenre = this.AddGenre.bind(this);
         this.UpdateGenre = this.UpdateGenre.bind(this);
+        this.GetAll = this.GetAll.bind(this);
     }
 
     componentDidMount() {
@@ -25,38 +25,51 @@ class AuthorsList extends React.Component {
     }
 
     GetAll() {
-        fetch('http://localhost:8080/switcher/GenreSwitcher.php?q=GetAll')
-        .then(response => response.json())
-        .then(json => {
-            this.setState({ genres: json});
+        var self = this;
+        $.ajax({
+            type : 'GET',
+            url : '/genres',
+            success: function(data) {
+                var genresData = JSON.parse(data);
+                self.setState({
+                    genres : genresData
+                }); 
+            },
+            error : function() {
+                alert("Coś poszło nie tak");
+            }
         });
     }
 
     Delete(id) {
-        fetch('http://localhost:8080/switcher/GenreSwitcher.php?q=Delete&id='+id)
-       .then(res => res.json())
-       .then(json => {
-            this.setState({ genres: json});
-       });
-       alert('Usunięto rekord');
+        var self = this;
+        $.ajax({
+            type : 'DELETE',
+            url : '/genres/' + id,
+            success : function() {                
+                alert('Usunięto rekord');
+                self.GetAll();
+            } 
+        });
     }
 
     AddGenre(genre) {
 
+        var obj = {
+            name : genre.name
+        };
+
+        obj = JSON.stringify(obj);
+
         var self = this;        
         $.ajax({
             type : "POST",
-            url : "switcher/GenreSwitcher.php?q=Add",
-            data : {
-                name : genre.name
-            },
-            success : function(data) {
-                var genresData = JSON.parse(data);
+            url : "/genres",
+            data : obj,
+            success : function() {
                 $("#addGenreModal").modal('hide');
                 alert("Dodano rekord");  
-                self.setState({
-                    genres: genresData
-                });
+                self.GetAll();
             },
             error : function() {
                 alert('Wystąpił błąd podczas dodawania rekordu!');
@@ -65,28 +78,28 @@ class AuthorsList extends React.Component {
     }
 
      UpdateGenre(genre) {
+
+        var obj = {
+            id : genre.id,
+            name : genre.name
+        };
+
+        obj = JSON.stringify(obj);
+
         var self = this;        
         $.ajax({
-            type : "POST",
-            url : "switcher/GenreSwitcher.php?q=Update",
-            data : {
-                id : genre.id,
-                name : genre.name
-            },
-            success : function(data) {
-                var genresData = JSON.parse(data);
+            type : "PUT",
+            url : "/genres",
+            data : obj,
+            success : function() {
                 $("#updateGenreModal").modal('hide');
                 alert("Edytowano rekord");  
-                self.setState({
-                    genres: genresData
-                });
+                self.GetAll();
             },
             error : function() {
                 alert('Wystąpił błąd podczas edytowania rekordu!');
             }
         });
-
-         $("#updateGenreModal").modal('hide');
      }
 
     render() {
@@ -118,4 +131,4 @@ class AuthorsList extends React.Component {
     }
 }
 
-export default AuthorsList;
+export default GenresList;

@@ -25615,25 +25615,25 @@ function _possibleConstructorReturn(self, call) { if (!self) { throw new Referen
 
 function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
-var AuthorsList = function (_React$Component) {
-    _inherits(AuthorsList, _React$Component);
+var GenresList = function (_React$Component) {
+    _inherits(GenresList, _React$Component);
 
-    function AuthorsList(props) {
-        _classCallCheck(this, AuthorsList);
+    function GenresList(props) {
+        _classCallCheck(this, GenresList);
 
-        var _this = _possibleConstructorReturn(this, (AuthorsList.__proto__ || Object.getPrototypeOf(AuthorsList)).call(this, props));
+        var _this = _possibleConstructorReturn(this, (GenresList.__proto__ || Object.getPrototypeOf(GenresList)).call(this, props));
 
         _this.state = {
-            //tu funkcja z ajaxa
             genres: []
         };
 
         _this.AddGenre = _this.AddGenre.bind(_this);
         _this.UpdateGenre = _this.UpdateGenre.bind(_this);
+        _this.GetAll = _this.GetAll.bind(_this);
         return _this;
     }
 
-    _createClass(AuthorsList, [{
+    _createClass(GenresList, [{
         key: 'componentDidMount',
         value: function componentDidMount() {
             this.GetAll();
@@ -25641,44 +25641,53 @@ var AuthorsList = function (_React$Component) {
     }, {
         key: 'GetAll',
         value: function GetAll() {
-            var _this2 = this;
-
-            fetch('http://localhost:8080/switcher/GenreSwitcher.php?q=GetAll').then(function (response) {
-                return response.json();
-            }).then(function (json) {
-                _this2.setState({ genres: json });
+            var self = this;
+            $.ajax({
+                type: 'GET',
+                url: '/genres',
+                success: function success(data) {
+                    var genresData = JSON.parse(data);
+                    self.setState({
+                        genres: genresData
+                    });
+                },
+                error: function error() {
+                    alert("Coś poszło nie tak");
+                }
             });
         }
     }, {
         key: 'Delete',
         value: function Delete(id) {
-            var _this3 = this;
-
-            fetch('http://localhost:8080/switcher/GenreSwitcher.php?q=Delete&id=' + id).then(function (res) {
-                return res.json();
-            }).then(function (json) {
-                _this3.setState({ genres: json });
+            var self = this;
+            $.ajax({
+                type: 'DELETE',
+                url: '/genres/' + id,
+                success: function success() {
+                    alert('Usunięto rekord');
+                    self.GetAll();
+                }
             });
-            alert('Usunięto rekord');
         }
     }, {
         key: 'AddGenre',
         value: function AddGenre(genre) {
 
+            var obj = {
+                name: genre.name
+            };
+
+            obj = JSON.stringify(obj);
+
             var self = this;
             $.ajax({
                 type: "POST",
-                url: "switcher/GenreSwitcher.php?q=Add",
-                data: {
-                    name: genre.name
-                },
-                success: function success(data) {
-                    var genresData = JSON.parse(data);
+                url: "/genres",
+                data: obj,
+                success: function success() {
                     $("#addGenreModal").modal('hide');
                     alert("Dodano rekord");
-                    self.setState({
-                        genres: genresData
-                    });
+                    self.GetAll();
                 },
                 error: function error() {
                     alert('Wystąpił błąd podczas dodawania rekordu!');
@@ -25688,33 +25697,33 @@ var AuthorsList = function (_React$Component) {
     }, {
         key: 'UpdateGenre',
         value: function UpdateGenre(genre) {
+
+            var obj = {
+                id: genre.id,
+                name: genre.name
+            };
+
+            obj = JSON.stringify(obj);
+
             var self = this;
             $.ajax({
-                type: "POST",
-                url: "switcher/GenreSwitcher.php?q=Update",
-                data: {
-                    id: genre.id,
-                    name: genre.name
-                },
-                success: function success(data) {
-                    var genresData = JSON.parse(data);
+                type: "PUT",
+                url: "/genres",
+                data: obj,
+                success: function success() {
                     $("#updateGenreModal").modal('hide');
                     alert("Edytowano rekord");
-                    self.setState({
-                        genres: genresData
-                    });
+                    self.GetAll();
                 },
                 error: function error() {
                     alert('Wystąpił błąd podczas edytowania rekordu!');
                 }
             });
-
-            $("#updateGenreModal").modal('hide');
         }
     }, {
         key: 'render',
         value: function render() {
-            var _this4 = this;
+            var _this2 = this;
 
             return _react2.default.createElement(
                 'div',
@@ -25764,25 +25773,25 @@ var AuthorsList = function (_React$Component) {
                         null,
                         this.state.genres.map(function (item, index) {
                             return _react2.default.createElement(_GenreListItem2.default, { deleteGenre: function deleteGenre(id) {
-                                    return _this4.Delete(id);
+                                    return _this2.Delete(id);
                                 }, key: index, genre: item });
                         })
                     )
                 ),
                 _react2.default.createElement(_AddGenreModal2.default, { addGenre: function addGenre(item) {
-                        return _this4.AddGenre(item);
+                        return _this2.AddGenre(item);
                     } }),
                 _react2.default.createElement(_UpdateGenreModal2.default, { handleSubmit: function handleSubmit(i) {
-                        return _this4.UpdateGenre(i);
+                        return _this2.UpdateGenre(i);
                     } })
             );
         }
     }]);
 
-    return AuthorsList;
+    return GenresList;
 }(_react2.default.Component);
 
-exports.default = AuthorsList;
+exports.default = GenresList;
 
 /***/ }),
 /* 92 */
