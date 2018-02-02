@@ -17,6 +17,9 @@ class BooksList extends React.Component {
         };
         
         this.UpdateBook = this.UpdateBook.bind(this);
+        this.GetAll = this.GetAll.bind(this);
+        this.GetAuthors = this.GetAuthors.bind(this);
+        this.GetGenres = this.GetGenres.bind(this);
     }
 
     componentDidMount() {
@@ -26,36 +29,66 @@ class BooksList extends React.Component {
     }
 
     GetAll() {
-        fetch('http://localhost:8080/switcher/BookSwitcher.php?q=GetAll')
-        .then(response => response.json())
-        .then(response => {
-            this.setState({books: response});
-        });
+        var self = this;
+        $.ajax({
+            type : 'GET',
+            url : '/books',
+            success: function(data) {
+                var booksData = JSON.parse(data);
+                self.setState({
+                    books : booksData
+                }); 
+            },
+            error : function() {
+                alert("Coś poszło nie tak");
+            }
+        });          
     }
 
     GetAuthors() {
-        fetch('http://localhost:8080/switcher/AuthorSwitcher.php?q=GetAll')
-        .then(response => response.json())
-        .then(json => {
-          this.setState({ authors: json});
-        });
+        var self = this;
+        $.ajax({
+            type : 'GET',
+            url : '/authors',
+            success: function(data) {
+                var authorsData = JSON.parse(data);
+                self.setState({
+                    authors : authorsData
+                }); 
+            },
+            error : function() {
+                alert("Coś poszło nie tak");
+            }
+        });          
     }
 
     GetGenres() {
-        fetch('http://localhost:8080/switcher/GenreSwitcher.php?q=GetAll')
-        .then(response => response.json())
-        .then(json => {
-          this.setState({ genres: json});
-        });
+        var self = this;
+        $.ajax({
+            type : 'GET',
+            url : '/genres',
+            success: function(data) {
+                var genresData = JSON.parse(data);
+                self.setState({
+                    genres : genresData
+                }); 
+            },
+            error : function() {
+                alert("Coś poszło nie tak");
+            }
+        });          
     }
 
     Delete(id) {
-        fetch('http://localhost:8080/switcher/BookSwitcher.php?q=Delete&id='+id)
-        .then(response => response.json())
-        .then(response => {
-            this.setState({books: response});
+        var self = this;
+        $.ajax({
+            type : 'DELETE',
+            url : '/books/' + id,
+            success : function() {                
+                alert('Usunięto rekord');
+                self.GetAll();
+            } 
         });
-        alert("Usunięto rekord");
     }
 
     Details(book) {
@@ -74,25 +107,26 @@ class BooksList extends React.Component {
     AddBook(book) {
         var self = this;
 
-        $.ajax({
-            type : "POST",
-            url : "switcher/BookSwitcher.php?q=Add",
-            data : {
-                title : book.title,
+        var obj = {
+            title : book.title,
                 isbn : book.isbn,
                 page_count : book.page_count,
                 year : book.year,
                 author_id : book.author_id,
                 genre_id : book.genre_id,
                 description : book.description
-            },
-            success: function(data) {
-                var booksData = JSON.parse(data);
+        };
+
+        obj = JSON.stringify(obj);
+
+        $.ajax({
+            type : "POST",
+            url : "/books",
+            data : obj,
+            success: function() {
                 $("#addBookModal").modal("hide");
                 alert("Dodano nowy rekord");
-                self.setState({
-                    books : booksData
-                });
+                self.GetAll();
             },
             error : function() {
                 alert("Wystąpił problem podczas dodawania rekordu");
@@ -103,26 +137,27 @@ class BooksList extends React.Component {
     UpdateBook(book) {
         var self = this;
 
-        $.ajax({
-            type : "POST",
-            url : "switcher/BookSwitcher.php?q=Update",
-            data : {
+        var obj = {
+                id : book.id,
                 title : book.title,
                 isbn : book.isbn,
                 page_count : book.page_count,
                 year : book.year,
                 author_id : book.author_id,
                 genre_id : book.genre_id,
-                description : book.description,
-                id : book.id
-            },
-            success: function(data) {
-                var booksData = JSON.parse(data);
+                description : book.description
+        };
+
+        obj = JSON.stringify(obj);
+
+        $.ajax({
+            type : "PUT",
+            url : "/books",
+            data : obj,
+            success: function() {
                 $("#updateBookModal").modal("hide");
                 alert("Edytowano rekord");
-                self.setState({
-                    books : booksData
-                });
+                self.GetAll();
             },
             error : function() {
                 alert("Wystąpił problem podczas edytowania rekordu");

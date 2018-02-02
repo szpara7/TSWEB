@@ -24650,6 +24650,9 @@ var BooksList = function (_React$Component) {
         };
 
         _this.UpdateBook = _this.UpdateBook.bind(_this);
+        _this.GetAll = _this.GetAll.bind(_this);
+        _this.GetAuthors = _this.GetAuthors.bind(_this);
+        _this.GetGenres = _this.GetGenres.bind(_this);
         return _this;
     }
 
@@ -24663,47 +24666,69 @@ var BooksList = function (_React$Component) {
     }, {
         key: 'GetAll',
         value: function GetAll() {
-            var _this2 = this;
-
-            fetch('http://localhost:8080/switcher/BookSwitcher.php?q=GetAll').then(function (response) {
-                return response.json();
-            }).then(function (response) {
-                _this2.setState({ books: response });
+            var self = this;
+            $.ajax({
+                type: 'GET',
+                url: '/books',
+                success: function success(data) {
+                    var booksData = JSON.parse(data);
+                    self.setState({
+                        books: booksData
+                    });
+                },
+                error: function error() {
+                    alert("Coś poszło nie tak");
+                }
             });
         }
     }, {
         key: 'GetAuthors',
         value: function GetAuthors() {
-            var _this3 = this;
-
-            fetch('http://localhost:8080/switcher/AuthorSwitcher.php?q=GetAll').then(function (response) {
-                return response.json();
-            }).then(function (json) {
-                _this3.setState({ authors: json });
+            var self = this;
+            $.ajax({
+                type: 'GET',
+                url: '/authors',
+                success: function success(data) {
+                    var authorsData = JSON.parse(data);
+                    self.setState({
+                        authors: authorsData
+                    });
+                },
+                error: function error() {
+                    alert("Coś poszło nie tak");
+                }
             });
         }
     }, {
         key: 'GetGenres',
         value: function GetGenres() {
-            var _this4 = this;
-
-            fetch('http://localhost:8080/switcher/GenreSwitcher.php?q=GetAll').then(function (response) {
-                return response.json();
-            }).then(function (json) {
-                _this4.setState({ genres: json });
+            var self = this;
+            $.ajax({
+                type: 'GET',
+                url: '/genres',
+                success: function success(data) {
+                    var genresData = JSON.parse(data);
+                    self.setState({
+                        genres: genresData
+                    });
+                },
+                error: function error() {
+                    alert("Coś poszło nie tak");
+                }
             });
         }
     }, {
         key: 'Delete',
         value: function Delete(id) {
-            var _this5 = this;
-
-            fetch('http://localhost:8080/switcher/BookSwitcher.php?q=Delete&id=' + id).then(function (response) {
-                return response.json();
-            }).then(function (response) {
-                _this5.setState({ books: response });
+            var self = this;
+            $.ajax({
+                type: 'DELETE',
+                url: '/books/' + id,
+                success: function success() {
+                    alert('Usunięto rekord');
+                    self.GetAll();
+                }
             });
-            alert("Usunięto rekord");
         }
     }, {
         key: 'Details',
@@ -24723,25 +24748,26 @@ var BooksList = function (_React$Component) {
         value: function AddBook(book) {
             var self = this;
 
+            var obj = {
+                title: book.title,
+                isbn: book.isbn,
+                page_count: book.page_count,
+                year: book.year,
+                author_id: book.author_id,
+                genre_id: book.genre_id,
+                description: book.description
+            };
+
+            obj = JSON.stringify(obj);
+
             $.ajax({
                 type: "POST",
-                url: "switcher/BookSwitcher.php?q=Add",
-                data: {
-                    title: book.title,
-                    isbn: book.isbn,
-                    page_count: book.page_count,
-                    year: book.year,
-                    author_id: book.author_id,
-                    genre_id: book.genre_id,
-                    description: book.description
-                },
-                success: function success(data) {
-                    var booksData = JSON.parse(data);
+                url: "/books",
+                data: obj,
+                success: function success() {
                     $("#addBookModal").modal("hide");
                     alert("Dodano nowy rekord");
-                    self.setState({
-                        books: booksData
-                    });
+                    self.GetAll();
                 },
                 error: function error() {
                     alert("Wystąpił problem podczas dodawania rekordu");
@@ -24753,26 +24779,27 @@ var BooksList = function (_React$Component) {
         value: function UpdateBook(book) {
             var self = this;
 
+            var obj = {
+                id: book.id,
+                title: book.title,
+                isbn: book.isbn,
+                page_count: book.page_count,
+                year: book.year,
+                author_id: book.author_id,
+                genre_id: book.genre_id,
+                description: book.description
+            };
+
+            obj = JSON.stringify(obj);
+
             $.ajax({
-                type: "POST",
-                url: "switcher/BookSwitcher.php?q=Update",
-                data: {
-                    title: book.title,
-                    isbn: book.isbn,
-                    page_count: book.page_count,
-                    year: book.year,
-                    author_id: book.author_id,
-                    genre_id: book.genre_id,
-                    description: book.description,
-                    id: book.id
-                },
-                success: function success(data) {
-                    var booksData = JSON.parse(data);
+                type: "PUT",
+                url: "/books",
+                data: obj,
+                success: function success() {
                     $("#updateBookModal").modal("hide");
                     alert("Edytowano rekord");
-                    self.setState({
-                        books: booksData
-                    });
+                    self.GetAll();
                 },
                 error: function error() {
                     alert("Wystąpił problem podczas edytowania rekordu");
@@ -24782,7 +24809,7 @@ var BooksList = function (_React$Component) {
     }, {
         key: 'render',
         value: function render() {
-            var _this6 = this;
+            var _this2 = this;
 
             return _react2.default.createElement(
                 'div',
@@ -24837,19 +24864,19 @@ var BooksList = function (_React$Component) {
                         null,
                         this.state.books.map(function (item, index) {
                             return _react2.default.createElement(_BookListItem2.default, { handleDetailsClick: function handleDetailsClick(book) {
-                                    return _this6.Details(book);
+                                    return _this2.Details(book);
                                 }, deleteBook: function deleteBook(id) {
-                                    return _this6.Delete(id);
+                                    return _this2.Delete(id);
                                 }, key: index, book: item });
                         })
                     )
                 ),
                 _react2.default.createElement(_BookDetailsModal2.default, null),
                 _react2.default.createElement(_AddBookModal2.default, { AddBook: function AddBook(i) {
-                        return _this6.AddBook(i);
+                        return _this2.AddBook(i);
                     }, genres: this.state.genres, authors: this.state.authors }),
                 _react2.default.createElement(_UpdateBookModal2.default, { UpdateBook: function UpdateBook(book) {
-                        return _this6.UpdateBook(book);
+                        return _this2.UpdateBook(book);
                     }, genres: this.state.genres, authors: this.state.authors })
             );
         }

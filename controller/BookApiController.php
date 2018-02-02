@@ -21,37 +21,41 @@ class BookApiController
         echo json_encode($data);
     }
 
-    public function Add($model)
+    public function Add()
     {
         $service = new BookService();
         $model = new Book();
 
-        $model->title = $_POST['title'];
-        $model->isbn = $_POST['isbn'];
-        $model->page_count = $_POST['page_count'];
-        $model->year = $_POST['year'];
-        $model->author_id = $_POST['author_id'];
-        $model->genre_id = $_POST['genre_id'];
-        $model->description = $_POST['description'];
+        $input = json_decode(file_get_contents('php://input'), true);
+
+        $model->title = $input['title'];
+        $model->isbn = $input['isbn'];
+        $model->page_count = $input['page_count'];
+        $model->year = $input['year'];
+        $model->author_id = $input['author_id'];
+        $model->genre_id = $input['genre_id'];
+        $model->description = $input['description'];
 
         $service->Add($model);
         $service->GetAll();
         $service->Disconnect();
     }
 
-    public function Update($model)
+    public function Update()
     {
         $service = new BookService();
         $model = new Book();
 
-        $model->title = $_POST['title'];
-        $model->isbn = $_POST['isbn'];
-        $model->page_count = $_POST['page_count'];
-        $model->year = $_POST['year'];
-        $model->author_id = $_POST['author_id'];
-        $model->genre_id = $_POST['genre_id'];
-        $model->description = $_POST['description'];
-        $model->id = $_POST['id'];
+        $input = json_decode(file_get_contents('php://input'), true);
+
+        $model->title = $input['title'];
+        $model->isbn = $input['isbn'];
+        $model->page_count = $input['page_count'];
+        $model->year = $input['year'];
+        $model->author_id = $input['author_id'];
+        $model->genre_id = $input['genre_id'];
+        $model->description = $input['description'];
+        $model->id = $input['id'];
 
         $service->Update($model);
         $service->Disconnect();
