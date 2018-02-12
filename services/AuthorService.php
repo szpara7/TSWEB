@@ -38,8 +38,7 @@ class AuthorService extends Database
     public function Add($model) 
     {
        try {
-        $stmt = $this->connection->prepare('INSERT INTO Author (first_name, last_name, date_birth, date_death, nationality, description)
-        VALUES (:first_name, :last_name, :date_birth, :date_death, :nationality, :description)');
+        $stmt = $this->connection->prepare('INSERT INTO Author (first_name, last_name, date_birth, date_death, nationality, description) VALUES (:first_name, :last_name, :date_birth, :date_death, :nationality, :description)');
         $stmt->bindParam(':first_name', $model->first_name);
         $stmt->bindParam(':last_name', $model->last_name);
         $stmt->bindParam(':date_birth', $model->date_birth, PDO::PARAM_STR);

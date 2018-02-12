@@ -26,16 +26,20 @@ class AuthorApiController
         $model = new Author();
 
         $input = json_decode(file_get_contents('php://input'), true);
-        
+        echo $input['first_name'];
         $model->first_name = $input['first_name'];
+        echo $input['last_name'];
         $model->last_name = $input['last_name'];
+        echo $input['description'];
         $model->description = $input['description'];
+        echo $input['nationality'];
         $model->nationality = $input['nationality'];
+        echo $input['birth_date'];
         $model->date_birth = $input['birth_date'];
+        echo $input['death_date'];
         $model->date_death = $input['death_date'];
 
         $service->Add($model);
-        $service->GetAll();
         $service->Disconnect();
     }
 

@@ -66,7 +66,7 @@ class BooksList extends React.Component {
         var self = this;
         $.ajax({
             type : 'GET',
-            url : '/genres',
+            url : 'http://localhost:8080/genres',
             success: function(data) {
                 var genresData = JSON.parse(data);
                 self.setState({
